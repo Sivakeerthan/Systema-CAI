@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title><?= $title ?> | Bbc MVC</title>
+    <title><?= $title ?> | Systema-CAI</title>
 
     <!-- Custom styles for this template -->
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -24,7 +24,7 @@
   <body>
     <div id="header" class="nav-wrapper">
 
-        <h3>ModuleRepetitionTool-SJ</h3>
+        <h3>Systema-CAI</h3>ss
     </div>
 
     <div class="container">
