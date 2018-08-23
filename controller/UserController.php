@@ -12,7 +12,7 @@ class UserController
     public $pregex = "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/";
     public function index()
     {
-        $view = new View('user_login');
+        $view = new View('overview_student');
         $view->title = 'Login';
         $view->heading = 'Login';
 
