@@ -24,7 +24,7 @@
   <body>
     <div id="header" class="nav-wrapper">
 
-        <h3>Systema-CAI</h3>ss
+        <h3>Systema-CAI</h3>
     </div>
 
     <div class="container">
