@@ -1,0 +1,53 @@
+$primary-color-dark: #512DA8;
+$primary-color-light: #D1C4E9;
+$primary-color: #673AB7;
+$accent-color: #536DFE;
+$text: #ffffff;
+$primary-text: #212121;
+html{
+  padding:0;
+  margin:0;
+  body {
+      background-color: $primary-color;
+      color: $text;
+      font-family: "Roboto",sans-serif;
+    display:block;
+      margin:0;
+      padding:0;
+    #header{
+      display:inline-block;
+      margin:0;
+      padding:0;
+      height: 5em;
+      width:100%;
+      background-color:$primary-color-dark;
+      h1{
+        vertical-align: middle;
+        text-align: center;
+        display:inherit;
+        margin: 0;
+        padding:0;
+
+      }
+    }
+    .container{
+      .signbtn{
+        height:5em;
+        margin:5px;
+        width:100%;
+        text-align: center;
+         p{
+           font-size:1.5em;
+           vertical-align: center;
+         }
+      }
+    }
+    .choice{
+      #profile .card{
+        height: 100%;
+        width:2em;
+      }
+    }
+  }
+}
+
