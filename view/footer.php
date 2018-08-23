@@ -2,7 +2,7 @@
         <footer>
           <p>&copy; Copyright MVC Framework from gibb/BBC
           </br>
-          A project by Jerico Lua & Sivakeerthan Vamanarajasekaran</p>
+          Projekt von Jerico Lua, Sivakeerthan Vamanarajasekaran, Dominik Schmalstieg und Joel Feller</p>
         </footer>
     </div>
 
