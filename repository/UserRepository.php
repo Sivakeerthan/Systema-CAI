@@ -29,14 +29,14 @@ class UserRepository extends Repository
      *
      * @throws Exception falls das Ausführen des Statements fehlschlägt
      */
-    public function create($username, $password, $isAdmin)
+    public function create($username, $password, $fname,$lname,$isAdmin)
     {
         $password = password_hash($password, PASSWORD_DEFAULT);
 
-        $query = "INSERT INTO $this->tableName (uname, pw, isAdmin) VALUES (?, ?, ?)";
+        $query = "INSERT INTO $this->tableName (firstname,lastname,username, password, isPrincipal,isSecretary,isStudent,isTeacher,isAdmin) VALUES (?,?,?,?,0,0,1,0,?)";
 
         $statement = ConnectionHandler::getConnection()->prepare($query);
-        $statement->bind_param('ssi',$username, $password, $isAdmin);
+        $statement->bind_param('ssssi',$fname,$lname,$username, $password,$isAdmin);
 
         if (!$statement->execute()) {
             throw new Exception($statement->error);
@@ -48,7 +48,7 @@ class UserRepository extends Repository
     public function readByName($uname)
     {
         // Query erstellen
-        $query = "SELECT uname, pw FROM {$this->tableName} WHERE uname =?";
+        $query = "SELECT username, password FROM {$this->tableName} WHERE username =?";
 
         // Datenbankverbindung anfordern und, das Query "preparen" (vorbereiten)
         // und die Parameter "binden"
@@ -73,9 +73,49 @@ class UserRepository extends Repository
         // Den gefundenen Datensatz zurückgeben
         return $row;
     }
+    public function getPos($uname){
+        // Query erstellen
+        $query = "SELECT isPrincipal,isSecretary,isStudent,isTeacher FROM {$this->tableName} WHERE username =?";
 
+        // Datenbankverbindung anfordern und, das Query "preparen" (vorbereiten)
+        // und die Parameter "binden"
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('s', $uname);
+
+        // Das Statement absetzen
+        $statement->execute();
+
+        // Resultat der Abfrage holen
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        // Ersten Datensatz aus dem Reultat holen
+        $row = $result->fetch_object();
+
+        // Datenbankressourcen wieder freigeben
+        $result->close();
+
+        if($row->isPrincipal){
+            return "principal";
+        }
+        if($row->isSecretary){
+            return "secretary";
+        }
+        if($row->isStudent){
+            return "student";
+        }
+        if($row->isTeacher){
+            return "teacher";
+        }
+        else{
+            return null;
+        }
+
+    }
     public function existingUsername($username){
-        $query = "SELECT uid FROM $this->tableName WHERE uname = ?";
+        $query = "SELECT uId FROM $this->tableName WHERE username = ?";
         $statement = ConnectionHandler::getConnection()->prepare($query);
 
         $statement->bind_param('s', $username);

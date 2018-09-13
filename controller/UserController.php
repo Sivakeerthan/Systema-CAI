@@ -29,13 +29,34 @@ class UserController
     public function doLogin(){
         $userRepository = new UserRepository();
         if(isset($_POST['send'])) {
-            if (isset($_POST['email']) && $_POST['password']) {
-                $username = htmlspecialchars($_POST['email']);
+            if (isset($_POST['uname']) && $_POST['password']) {
+                $username = htmlspecialchars($_POST['uname']);
                 $password = htmlspecialchars($_POST['password']);
                 $user = $userRepository->readByName($username);
-                if ($user->uname != null) {
-                    if (password_verify($password, $user->pw)) {
-                        header('Location: /overview');
+                if ($user->username != null) {
+                    if (password_verify($password, $user->password)) {
+                        $pos = $userRepository->getPos($username);
+                        if(isset($pos)) {
+                            switch ($pos) {
+                                case "principal":
+                                    header('Location: /overview/principal');
+                                    break;
+                                case "secretary":
+                                    header('Location: /overview/secretary');
+                                    break;
+                                case "student":
+                                    header('Location: /overview/student');
+                                    break;
+                                case "teacher":
+                                    header('Location: /overview/teacher');
+                                    break;
+                            }
+                        }else{
+                            $this->doError('Login Failed: User has no Category');
+                            header('Location: /user/login');
+                        }
+
+
                     } else {
                         $this->doError('Wrong Password!!');
                         header('Location: /user/login');
@@ -59,7 +80,9 @@ class UserController
     public function doCreate()
     {
         if (isset($_POST['signup'])) {
-             $username = htmlspecialchars($_POST['email']);
+            $firstname = htmlspecialchars($_POST['fname']);
+            $lastname = htmlspecialchars($_POST['lname']);
+             $username = htmlspecialchars($_POST['uname']);
             $password = htmlspecialchars($_POST['password']);
             $password2 = htmlspecialchars($_POST['password2']);
             if($username == "jericoluislua" || $username == "SVRNM"){
@@ -77,7 +100,7 @@ class UserController
                         header('Location: /user/create');
                     }
                     if($userRepository->existingUsername($username) == false){
-                        $userRepository->create($username, $password, $isAdmin);
+                        $userRepository->create($username, $password, $firstname,$lastname,$isAdmin);
                         // goes directly to the login page (HTTP 302)
                         $this->doError("Succesfully registered!");
                         header('Location: /user/login');

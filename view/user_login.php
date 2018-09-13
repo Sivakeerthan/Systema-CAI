@@ -2,9 +2,9 @@
     <div class="component" data-html="true">
         <div class="form-group">
             <div class="form-group">
-                <label class="col-md-2 control-label" for="email">Username</label>
+                <label class="col-md-2 control-label" for="uname">Username</label>
                 <div class="col-md-4">
-                    <input id="email" name="email" type="text" placeholder="Username" class="form-control input-md">
+                    <input id="uname" name="uname" type="text" placeholder="Username" class="form-control input-md">
                 </div>
             </div>
             <div class="form-group">

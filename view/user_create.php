@@ -1,10 +1,22 @@
 <form class="form-horizontal" action="/user/doCreate" method="post">
 	<div class="component" data-html="true">
 		<div class="form-group">
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="fname">First Name</label>
+            <div class="col-md-4">
+                <input id="fname" name="fname" type="text" placeholder="First Name" class="form-control input-md" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="lname">Last Name</label>
+            <div class="col-md-4">
+                <input id="lname" name="lname" type="text" placeholder="Last Name" class="form-control input-md" required>
+            </div>
+        </div>
 		<div class="form-group">
-		  <label class="col-md-2 control-label" for="email">Username</label>
+		  <label class="col-md-2 control-label" for="uname">Username</label>
 		  <div class="col-md-4">
-		  	<input id="email" name="email" type="text" placeholder="Username" class="form-control input-md" required>
+		  	<input id="uname" name="uname" type="text" placeholder="Username" class="form-control input-md" required>
 		  </div>
 		</div>
 		<div class="form-group">
