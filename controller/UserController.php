@@ -35,7 +35,7 @@ class UserController
                 $user = $userRepository->readByName($username);
                 if ($user->uname != null) {
                     if (password_verify($password, $user->pw)) {
-                        header('Location: /choice');
+                        header('Location: /overview');
                     } else {
                         $this->doError('Wrong Password!!');
                         header('Location: /user/login');
