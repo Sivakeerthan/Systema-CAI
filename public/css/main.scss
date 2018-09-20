@@ -1,8 +1,9 @@
-$primary-color-dark: #512DA8;
-$primary-color-light: #D1C4E9;
-$primary-color: #673AB7;
-$accent-color: #536DFE;
+$primary-color-dark: #34495e;
+$primary-color-light: #C5CAE9;
+$primary-color: #ffffff;
+$accent-color: #448AFF;
 $text: #ffffff;
+$text2: #000000;
 $primary-text: #212121;
 html{
   padding:0;
@@ -31,6 +32,7 @@ html{
       }
     }
     .container{
+      color: $text2;
       .signbtn{
         height:5em;
         margin:5px;
@@ -46,7 +48,11 @@ html{
       #calendar {
         max-width: 900px;
         margin: 0 auto;
+        color: $text2;
       }
+    }
+    footer{
+      color: $text2;
     }
   }
 }

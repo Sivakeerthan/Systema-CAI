@@ -13,7 +13,9 @@
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <!--Import materialize.css-->
       <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css"  media="screen,projection"/>
-    <link href="/css/main.css" rel="stylesheet">
+      <link href='/js/plugins/fullcalendar/css/fullcalendar.min.css' rel='stylesheet'/>
+      <link href='/js/plugins/fullcalendar/css/fullcalendar.print.min.css' rel='stylesheet' media='print'/>
+      <link href="/css/main.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
