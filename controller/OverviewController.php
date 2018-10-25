@@ -52,6 +52,7 @@ class   OverviewController
         $view = new View('overview_student');
         $view->title = 'Übersicht';
         $view->heading = 'Übersicht';
+        $view->uname = $_SESSION['user'];
         $eventrepository = new EventRepository();
         $view->events = $eventrepository->readAll();
 

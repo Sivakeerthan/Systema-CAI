@@ -10,11 +10,8 @@
     <script src='/js/plugins/fullcalendar/lib/moment.min.js'></script>
     <script src='/js/plugins/fullcalendar/lib/jquery.min.js'></script>
     <script src='/js/plugins/fullcalendar/js/fullcalendar.min.js'></script>
-    <script src='/js/plugins/fullcalendar/calendar-script.js'></script>
-        <?php
-        print_r($_SESSION);
-        if(isset($_SESSION['user'])):?>
-            <script>
+    <script>
+            $(document).ready(function () {
                 $('#calendar').fullCalendar({
                     header: {
                         left: 'prev,next today',
@@ -28,20 +25,28 @@
                     events: [
                         <?php foreach ($events AS $event):?>
                         {
-                            title: <?=$event->name?>,
-                            start: <?=$event->date?>,
-                            color: <?php if($event->isKK){
+
+                            title: "<?=$event->name?>",
+                            start: "<?=$event->date?>",
+                            color:"<?php if($event->isKK){
                                 echo "#D32F2F";
                             }
                             else{
                                 echo "#757575";
-                            }?>
+                            }?>"
                         },
                         <?php endforeach;?>
                     ]
                 });
-            </script>
+            });
+
+        </script>
+        <?php
+        if(isset($_SESSION['user'])):?>
+
         <?php endif;?>
+    <script src='/js/plugins/fullcalendar/calendar-script.js'></script>
+
     <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
         <?php
