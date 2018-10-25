@@ -22,13 +22,23 @@ html{
       height: 5em;
       width:100%;
       background-color:$primary-color-dark;
-      h1{
-        vertical-align: middle;
+      h3{
         text-align: center;
-        display:inherit;
+        vertical-align: center;
+        display:inline-block;
         margin: 0;
         padding:0;
-
+        float:left;
+        max-width:50%;
+        height:100%;
+      }
+      li{
+        text-align: center;
+        vertical-align: center;
+        float: right;
+        display:inline-block;
+        max-width:30%;
+        height:100%;
       }
     }
     .container{

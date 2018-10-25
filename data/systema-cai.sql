@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 13. Sep 2018 um 09:46
+-- Erstellungszeit: 25. Okt 2018 um 08:19
 -- Server-Version: 10.1.34-MariaDB
 -- PHP-Version: 7.2.8
 
@@ -119,16 +119,24 @@ INSERT INTO `subject` (`subjId`, `name`) VALUES
 
 CREATE TABLE `user` (
   `uId` int(11) NOT NULL,
-  `name` varchar(20) NOT NULL,
   `firstname` varchar(20) NOT NULL,
+  `lastname` varchar(20) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
   `isStudent` tinyint(1) NOT NULL,
   `isTeacher` tinyint(1) NOT NULL,
   `isPrincipal` tinyint(1) NOT NULL,
   `isSecretary` tinyint(1) NOT NULL,
+  `isAdmin` tinyint(1) NOT NULL,
   `kontingent` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `user`
+--
+
+INSERT INTO `user` (`uId`, `firstname`, `lastname`, `username`, `password`, `isStudent`, `isTeacher`, `isPrincipal`, `isSecretary`, `isAdmin`, `kontingent`) VALUES
+(1, 'Sivakeerthan', 'Vamanarajasekaran', 'SVRNM', '$2y$10$Uc8v.aZ87anXGs37HmQjSuGvJBcMYQ3.5YfQq7mpUggVgBowRhZce', 1, 0, 0, 0, 1, NULL);
 
 --
 -- Indizes der exportierten Tabellen
@@ -208,7 +216,7 @@ ALTER TABLE `subject`
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `uId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `uId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
