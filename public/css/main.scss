@@ -15,6 +15,7 @@ html{
     display:block;
       margin:0;
       padding:0;
+    z-index:0;
     #header{
       display:inline-block;
       margin:0;
@@ -55,11 +56,21 @@ html{
       }
     }
     .overview{
+      z-index:0;
       #calendar {
         max-width: 900px;
         margin: 0 auto;
         color: $text2;
       }
+
+    }
+    #absence-form{
+      display:none;
+      float: none;
+      z-index:1!important;
+      width:80%;
+      margin: 0 auto;
+      padding: 5px;
     }
     footer{
       color: $text2;

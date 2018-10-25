@@ -7,7 +7,8 @@ html {
     font-family: "Roboto",sans-serif;
     display: block;
     margin: 0;
-    padding: 0; }
+    padding: 0;
+    z-index: 0; }
     html body #header {
       display: inline-block;
       margin: 0;
@@ -41,10 +42,19 @@ html {
         html body .container .signbtn p {
           font-size: 1.5em;
           vertical-align: center; }
-    html body .overview #calendar {
-      max-width: 900px;
+    html body .overview {
+      z-index: 0; }
+      html body .overview #calendar {
+        max-width: 900px;
+        margin: 0 auto;
+        color: #000000; }
+    html body #absence-form {
+      display: none;
+      float: none;
+      z-index: 1 !important;
+      width: 80%;
       margin: 0 auto;
-      color: #000000; }
+      padding: 5px; }
     html body footer {
       color: #000000; }
 

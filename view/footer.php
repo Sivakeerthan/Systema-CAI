@@ -9,6 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src='/js/plugins/fullcalendar/lib/moment.min.js'></script>
     <script src='/js/plugins/fullcalendar/lib/jquery.min.js'></script>
+    <script src="/js/main.js"></script>
     <script src='/js/plugins/fullcalendar/js/fullcalendar.min.js'></script>
     <script>
             $(document).ready(function () {
@@ -16,7 +17,7 @@
                     header: {
                         left: 'prev,next today',
                         center: 'title',
-                        right: 'month,basicWeek,basicDay'
+                        right: 'month,basicWeek,basicDay,'
                     },
                     defaultDate: new Date(),
                     editable: true,

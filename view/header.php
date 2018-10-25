@@ -28,10 +28,11 @@
 
         <?php if(isset($_SESSION['user'])):?>
         <h3><?=$_SESSION['user']?></h3>
+        <li class="form-btn">Absenz Melden</li>
         <?php else: ?>
         <h3>Systema-CAI</h3>
         <?php endif;?>
-        <li>Absenz Melden</li>
+
 
     </div>
 
