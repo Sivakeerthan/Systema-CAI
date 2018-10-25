@@ -28,7 +28,7 @@
 
         <?php if(isset($_SESSION['user'])):?>
         <h3><?=$_SESSION['user']?></h3>
-            <li class="form-btn"><a href="">Absenz Melden</a></li>
+            <button class="form-btn">Absenz Melden</button>
         <?php else: ?>
         <h3>Systema-CAI</h3>
         <?php endif;?>

@@ -36,7 +36,7 @@ html{
 
 
       }
-      li{
+      button{
         text-align: center;
         vertical-align: center;
         float: right;
@@ -44,9 +44,10 @@ html{
         max-width:30%;
         height:100%;
         padding: 11px 0;
-        a{
-          color: white;
-        }
+        color: white;
+        background-color: transparent;
+        border: none;
+        font-size: large;
       }
     }
     .container{
@@ -75,7 +76,6 @@ html{
       display:none;
       float: none;
       z-index:1!important;
-      width:80%;
       margin: 0 auto;
       padding: 5px;
     }
