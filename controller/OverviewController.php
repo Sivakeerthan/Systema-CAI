@@ -22,6 +22,7 @@
  *     - Daten welche z.B. von einem Formular kommen validieren und dem Model
  *         übergeben, damit sie in der Datenbank persistiert werden können.
  */
+require_once '../repository/EventRepository.php';
 class   OverviewController
 {
     /**
@@ -51,6 +52,9 @@ class   OverviewController
         $view = new View('overview_student');
         $view->title = 'Übersicht';
         $view->heading = 'Übersicht';
+        $eventrepository = new EventRepository();
+        $view->events = $eventrepository->readAll();
+
         $view->display();
     }
     public function teacher(){

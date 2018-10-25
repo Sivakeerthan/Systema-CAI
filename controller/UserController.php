@@ -36,18 +36,27 @@ class UserController
                 if ($user->username != null) {
                     if (password_verify($password, $user->password)) {
                         $pos = $userRepository->getPos($username);
+
                         if(isset($pos)) {
                             switch ($pos) {
                                 case "principal":
+                                    $_SESSION['user'] = $username;
+                                    $_SESSION['pos'] = "pr";
                                     header('Location: /overview/principal');
                                     break;
                                 case "secretary":
+                                    $_SESSION['user'] = $username;
+                                    $_SESSION['pos'] = "se";
                                     header('Location: /overview/secretary');
                                     break;
                                 case "student":
+                                    $_SESSION['user'] = $username;
+                                    $_SESSION['pos'] = "st";
                                     header('Location: /overview/student');
                                     break;
                                 case "teacher":
+                                    $_SESSION['user'] = $username;
+                                    $_SESSION['pos'] = "te";
                                     header('Location: /overview/teacher');
                                     break;
                             }
@@ -123,7 +132,6 @@ class UserController
 
     public function doError($error){
         $this->err = array_fill(0,1,$error);
-        session_start();
         $_SESSION['err'] = $this->err;
     }
     public function delete()

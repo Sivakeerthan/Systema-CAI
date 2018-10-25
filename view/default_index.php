@@ -1,3 +1,4 @@
+<?php if(!isset($_SESSION['pos'])||!isset($_SESSION['user'])):?>
 <div class="row">
 
         <div class="col s6">
@@ -19,3 +20,24 @@
 
 
 </div>
+<?php endif;?>
+<?php if(isset($_SESSION['pos'])&&isset($_SESSION['user'])) {
+
+        switch ($_SESSION['pos']) {
+            case "pr":
+                header('Location: /overview/principal');
+                break;
+            case "se":
+                header('Location: /overview/secretary');
+                break;
+            case "st":
+                header('Location: /overview/student');
+                break;
+            case "te":
+                header('Location: /overview/teacher');
+                break;
+        }
+    }
+
+?>
+

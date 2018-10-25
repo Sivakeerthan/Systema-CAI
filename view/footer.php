@@ -11,11 +11,40 @@
     <script src='/js/plugins/fullcalendar/lib/jquery.min.js'></script>
     <script src='/js/plugins/fullcalendar/js/fullcalendar.min.js'></script>
     <script src='/js/plugins/fullcalendar/calendar-script.js'></script>
-
+        <?php
+        print_r($_SESSION);
+        if(isset($_SESSION['user'])):?>
+            <script>
+                $('#calendar').fullCalendar({
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay'
+                    },
+                    defaultDate: new Date(),
+                    editable: true,
+                    droppable: true, // this allows things to be dropped onto the calendar
+                    eventLimit: true, // allow "more" link when too many events
+                    events: [
+                        <?php foreach ($events AS $event):?>
+                        {
+                            title: <?=$event->name?>,
+                            start: <?=$event->date?>,
+                            color: <?php if($event->isKK){
+                                echo "#D32F2F";
+                            }
+                            else{
+                                echo "#757575";
+                            }?>
+                        },
+                        <?php endforeach;?>
+                    ]
+                });
+            </script>
+        <?php endif;?>
     <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
         <?php
-        session_start();
         if(isset($_SESSION['err'])):
         foreach($_SESSION['err'] as $error):?>
         <script type="text/javascript">
