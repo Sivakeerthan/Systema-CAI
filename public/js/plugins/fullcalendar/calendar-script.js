@@ -28,7 +28,7 @@ $(document).ready(function() {
             center: 'title',
             right: 'month,basicWeek,basicDay'
         },
-        defaultDate: '2015-05-12',
+        defaultDate: new Date(),
         editable: true,
         droppable: true, // this allows things to be dropped onto the calendar
         eventLimit: true, // allow "more" link when too many events
