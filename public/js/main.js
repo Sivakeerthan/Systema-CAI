@@ -9,6 +9,7 @@ $(document).ready(function () {
            $("#calendar").removeClass("hide");
            $("#absence-form").addClass("hide");
         }
+        $('textarea').characterCounter();
     });
 
     $('.datepicker').datepicker();

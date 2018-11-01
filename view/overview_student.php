@@ -39,7 +39,7 @@
         <div class="form-group" id="disp-Info">
             <div class="row">
                 <div class="input-field col s6">
-                    <textarea name="disp_request" class="materialize-textarea" data-length="100"></textarea>
+                    <textarea name="disp_request" class="materialize-textarea" maxlength="200" data-length="200"></textarea>
                     <label>Nachricht</label>
                 </div>
             </div>
