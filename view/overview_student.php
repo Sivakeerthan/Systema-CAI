@@ -15,7 +15,7 @@
                     <option value="kont">Kontingent</option>
                     <option value="disp">Dispensation</option>
                 </select>
-                <label>Materialize Select</label>
+                <label>Absenztyp wählen</label>
             </div>
         </div>
         <div class="row">
