@@ -15,7 +15,7 @@
                     <option value="kont">Kontingent</option>
                     <option value="disp">Dispensation</option>
                 </select>
-                <label>Materialize Select</label>
+                <label>Absenzart</label>
             </div>
         </div>
         <div class="row">
@@ -32,19 +32,25 @@
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <input id="email" type="email" class="validate">
-                <label for="email">Email</label>
+                <input type="number" name="anz-HT">
+                <label>Anzahl Halbtage</label>
             </div>
         </div>
-        <div class="row">
-            <div class="col s12">
-                <div class="input-field inline">
-                    <input id="email_inline" type="email" class="validate">
-                    <label for="email_inline">Email</label>
-                    <span class="helper-text" data-error="wrong" data-success="right">Helper text</span>
+        <div class="form-group" id="disp-Info">
+            <div class="row">
+                <div class="input-field col s6">
+                    <input type="text" name="disp_request" maxlength="100">
+                    <label>Anfrage</label>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input type="number" name="anz-HT">
+                    <label>Anzahl Halbtage</label>
+                </div>
+            </div>
+         </div>
+
     </form>
 </div>
 <div class="container">
