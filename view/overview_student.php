@@ -8,23 +8,28 @@
 
 </div>
 <div id="absence-form" class="container card">
-    <form class="col s12">
+    <form class="col s12" method="post">
         <div class="row">
-            <div class="input-field col s6">
-                <input placeholder="" id="first_name" type="text" class="validate">
-                <label for="first_name">First Name</label>
+            <div class="input-field col s12">
+                <select id="absence-type" name="absence-type">
+                    <option value="" disabled selected>Choose your option</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
+                <label>Materialize Select</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <input placeholder="" id="last_name" type="text" class="validate">
-                <label for="last_name">Last Name</label>
+                <input type="text" name="date_start" class="datepicker">
+                <label>Anfangsdatum</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <input id="password" type="password" class="validate">
-                <label for="password">Password</label>
+                <input type="text" name="date_end" class="datepicker">
+                <label>Enddatum</label>
             </div>
         </div>
         <div class="row">

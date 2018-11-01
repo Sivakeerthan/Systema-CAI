@@ -20,8 +20,9 @@
                         right: 'month,basicWeek,basicDay,'
                     },
                     defaultDate: new Date(),
-                    editable: true,
-                    droppable: true, // this allows things to be dropped onto the calendar
+                    editable: false,
+                    droppable: false,
+                    draggable: false,// this allows things to be dropped onto the calendar
                     eventLimit: true, // allow "more" link when too many events
                     events: [
                         <?php foreach ($events AS $event):?>
