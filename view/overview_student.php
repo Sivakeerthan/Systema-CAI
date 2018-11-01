@@ -10,12 +10,10 @@
 <div id="absence-form" class="container card">
     <form class="col s12" method="post">
         <div class="row">
-            <div class="input-field col s12">
+            <div class="input-field col s6">
                 <select id="absence-type" name="absence-type">
-                    <option value="" disabled selected>Choose your option</option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
+                    <option value="kont">Kontingent</option>
+                    <option value="disp">Dispensation</option>
                 </select>
                 <label>Materialize Select</label>
             </div>
