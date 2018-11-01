@@ -1,7 +1,10 @@
 $(document).ready(function () {
     $(".form-btn").click(function () {
-       $("#calendar").css("display","none");
-       $("#absence-form").css("display","block");
+       if(($("#absence-form").css("display","none")) && ($("#calendar").css("display","block"))){
+           $("#calendar").css("display", "none");
+           $("#absence-form").css("display", "block");
+
+       }
     });
     $('.datepicker').datepicker();
     var elems = document.querySelectorAll('select');

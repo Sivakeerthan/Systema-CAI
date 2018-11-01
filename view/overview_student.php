@@ -20,13 +20,13 @@
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <input type="text" name="date_start" class="datepicker">
+                <input type="text" name="date_start" class="datepicker" value="<?= $today ?>">
                 <label>Anfangsdatum</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <input type="text" name="date_end" class="datepicker">
+                <input type="text" name="date_end" class="datepicker" value="<?= $today ?>">
                 <label>Enddatum</label>
             </div>
         </div>
