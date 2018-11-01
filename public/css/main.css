@@ -55,12 +55,13 @@ html {
         margin: 0 auto;
         color: #000000; }
     html body #absence-form {
-      display: none;
       float: none;
       z-index: 1 !important;
       margin: 0 auto;
       padding: 5px; }
     html body footer {
       color: #000000; }
+    html body .hide {
+      display: none; }
 
 /*# sourceMappingURL=main.css.map */

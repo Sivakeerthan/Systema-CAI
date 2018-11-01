@@ -73,7 +73,6 @@ html{
 
     }
     #absence-form{
-      display:none;
       float: none;
       z-index:1!important;
       margin: 0 auto;
@@ -81,6 +80,9 @@ html{
     }
     footer{
       color: $text2;
+    }
+    .hide{
+      display:none;
     }
   }
 }

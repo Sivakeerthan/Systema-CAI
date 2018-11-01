@@ -7,7 +7,7 @@
 
 
 </div>
-<div id="absence-form" class="container card">
+<div id="absence-form" class="container card hide">
     <form class="col s12" method="post">
         <div class="row">
             <div class="input-field col s6">
@@ -39,17 +39,29 @@
         <div class="form-group" id="disp-Info">
             <div class="row">
                 <div class="input-field col s6">
-                    <input type="text" name="disp_request" maxlength="100">
-                    <label>Anfrage</label>
+                    <textarea name="disp_request" class="materialize-textarea" data-length="100"></textarea>
+                    <label>Nachricht</label>
                 </div>
             </div>
             <div class="row">
-                <div class="input-field col s6">
-                    <input type="number" name="anz-HT">
-                    <label>Anzahl Halbtage</label>
+                <div class="file-field input-field col s6">
+                  <div class="btn">
+                      <span>File</span>
+                      <input type="file">
+                  </div>
+                    <div class="file-path-wrapper">
+                        <input type="text" class="file-path validate" placeholder="Dokument hochladen">
+                    </div>
                 </div>
             </div>
          </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <button class="btn waves-effect waves-light" type="submit" name="submit">Senden
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </div>
 
     </form>
 </div>
