@@ -71,4 +71,7 @@ class   OverviewController
         $view->heading = 'Übersicht';
         $view->display();
     }
+    public function addAbsence(){
+
+    }
 }

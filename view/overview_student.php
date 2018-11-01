@@ -8,7 +8,7 @@
 
 </div>
 <div id="absence-form" class="container card hide">
-    <form class="col s12" method="post">
+    <form class="col s12" method="post" action="overview/addAbsence">
         <div class="row">
             <div class="input-field col s6">
                 <select id="absence-type" name="absence-type">
