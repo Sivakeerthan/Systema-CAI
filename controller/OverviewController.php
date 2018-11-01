@@ -53,6 +53,7 @@ class   OverviewController
         $view->title = 'Übersicht';
         $view->heading = 'Übersicht';
         $view->uname = $_SESSION['user'];
+        $view->today = date("M d, Y");
         $eventrepository = new EventRepository();
         $view->events = $eventrepository->readAll();
 
