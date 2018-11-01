@@ -38,8 +38,8 @@ class   OverviewController
         //   "default_index" rendern. Wie das genau funktioniert, ist in der
         //   View Klasse beschrieben.
         $view = new View('overview_index');
-        $view->title = 'Acces Denied!';
-        $view->heading = 'Acces Denied!';
+        $view->title = 'Access Denied!';
+        $view->heading = 'Access Denied!';
         $view->display();
     }
     public function principal(){
@@ -58,6 +58,9 @@ class   OverviewController
         $view->events = $eventrepository->readAll();
 
         $view->display();
+        if ($_POST['submit']){
+            $this->addAbsence();
+        }
     }
     public function teacher(){
         $view = new View('overview_teacher');
@@ -72,6 +75,13 @@ class   OverviewController
         $view->display();
     }
     public function addAbsence(){
+        $absencetype = htmlspecialchars($_POST['absencetype']);
+        $date_start = htmlspecialchars($_POST['date_start']);
+        $date_end = htmlspecialchars($_POST['date_end']);
+        $anzHT = htmlspecialchars($_POST['anz-HT']);
+        $disp_request = htmlspecialchars($_POST['disp_request']);
+        $doc_file = htmlspecialchars($_POST['doc_file']);
+
 
     }
 }

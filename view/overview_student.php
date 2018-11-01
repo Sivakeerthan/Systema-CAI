@@ -47,7 +47,7 @@
                 <div class="file-field input-field col s6">
                   <div class="btn">
                       <span>File</span>
-                      <input type="file">
+                      <input type="file" name="doc_file">
                   </div>
                     <div class="file-path-wrapper">
                         <input type="text" class="file-path validate" placeholder="Dokument hochladen">
