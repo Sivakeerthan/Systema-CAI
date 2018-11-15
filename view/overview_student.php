@@ -36,7 +36,7 @@
                 <label>Anzahl Halbtage</label>
             </div>
         </div>
-        <div class="form-group" id="disp-Info">
+        <div class="form-group hide" id="disp-Info">
             <div class="row">
                 <div class="input-field col s6">
                     <textarea name="disp_request" class="materialize-textarea" maxlength="200" data-length="200"></textarea>
