@@ -41,21 +41,25 @@ class UserController
                             switch ($pos) {
                                 case "principal":
                                     $_SESSION['user'] = $username;
+                                    $_SESSION['uid'] =$user->uid;
                                     $_SESSION['pos'] = "pr";
                                     header('Location: /overview/principal');
                                     break;
                                 case "secretary":
                                     $_SESSION['user'] = $username;
+                                    $_SESSION['uid'] =$user->uid;
                                     $_SESSION['pos'] = "se";
                                     header('Location: /overview/secretary');
                                     break;
                                 case "student":
                                     $_SESSION['user'] = $username;
+                                    $_SESSION['uid'] =$user->uid;
                                     $_SESSION['pos'] = "st";
                                     header('Location: /overview/student');
                                     break;
                                 case "teacher":
                                     $_SESSION['user'] = $username;
+                                    $_SESSION['uid'] =$user->uid;
                                     $_SESSION['pos'] = "te";
                                     header('Location: /overview/teacher');
                                     break;

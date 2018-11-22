@@ -23,6 +23,7 @@
  *         übergeben, damit sie in der Datenbank persistiert werden können.
  */
 require_once '../repository/EventRepository.php';
+require_once '../repository/AbsentRepository.php';
 class   OverviewController
 {
     /**
@@ -32,6 +33,7 @@ class   OverviewController
      * welcher Controller und welche Methode aufgerufen wird, ist im Dispatcher
      * beschrieben.
      */
+    public $err = array();
     public function index()
     {
         // In diesem Fall möchten wir dem Benutzer die View mit dem Namen
@@ -75,13 +77,71 @@ class   OverviewController
         $view->display();
     }
     public function addAbsence(){
+        $absentrepository = new AbsentRepository();
         $absencetype = htmlspecialchars($_POST['absencetype']);
         $date_start = htmlspecialchars($_POST['date_start']);
         $date_end = htmlspecialchars($_POST['date_end']);
-        $anzHT = htmlspecialchars($_POST['anz-HT']);
-        $disp_request = htmlspecialchars($_POST['disp_request']);
-        $doc_file = htmlspecialchars($_POST['doc_file']);
+        $anzKontInput = intval(htmlspecialchars($_POST['anz-HT']));
+        $anzKont = intval($absentrepository->getHT($date_start,$date_end,$_SESSION['uid']));
+        $absid = $absentrepository->createAbsent($_SESSION['uid'],$date_start,$date_end);
+        $dispid = null;
+        $isKont = true;
+        $isDisp = false;
+        if($absencetype = 'disp') {
+            $disp_request = htmlspecialchars($_POST['disp_request']);
+            $path = $this->uploadRequest();
+            $isKont = false;
+            $isDisp = true;
+            if($path != null) {
+                $dispid = $absentrepository->createDisp($disp_request,$path);
+            }
+        }
+        if($anzKont!=null) {
+            $anzahl = $anzKont;
+            if($anzKontInput >=4) {
+                if ($anzKont <= $anzKontInput) {
+                    $anzahl =$anzKont;
+                }
+                if ($anzKont > $anzKontInput) {
+                    $anzahl = $anzKontInput;
+                }
+            }
+            for ($i = 0; $i <= $anzahl; $i++) {
+                $absentrepository->insertLesson($absid, $isKont, $isDisp, $dispid);
+            }
+        }
 
+    }
+    private function uploadRequest(){
+        if(isset($_FILES['doc_file']['tmp_name'])) {
+            $extension = strtolower(pathinfo($_FILES['datei']['name'], PATHINFO_EXTENSION));
+            if (!in_array($extension, 'pdf')) {
+                $this->doError("Ungültige Dateiendung");
+                return null;
+            }
+            $detected_type = $_FILES['doc_file']['type'];
+            if ($detected_type != "application/pdf") {
+                $this->doError("Nur der Upload von PDF-Dateien ist gestattet");
+                return null;
+            }
+            if ($detected_type == "application/pdf") {
+                $targetfolder = './files/disp/' . $_FILES['doc_file']['name'];
+                if (move_uploaded_file($_FILES['doc_file']['tmp_name'],$targetfolder)) {
+                    $this->doError("Ihre Datei wurde erfolgreich hochgeladen");
+                    return $targetfolder;
+                } else {
+                    $this->doError("Ein Fehler ist aufgetreten :(");
+                    return null;
+                }
 
+            }
+        }
+        else{
+            return null;
+        }
+    }
+    public function doError($error){
+        $this->err = array_fill(0,1,$error);
+        $_SESSION['err'] = $this->err;
     }
 }

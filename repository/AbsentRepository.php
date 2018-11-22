@@ -29,22 +29,30 @@ class AbsentRepository extends Repository
      *
      * @throws Exception falls das Ausführen des Statements fehlschlägt
      */
-    public function create($username, $password, $isAdmin)
+    public function createAbsent($student,$date_start,$date_end)
     {
-        $password = password_hash($password, PASSWORD_DEFAULT);
-
-        $query = "INSERT INTO $this->tableName (uname, pw, isAdmin) VALUES (?, ?, ?)";
+        $query = "INSERT INTO  absent (student_id,date_start,date_end) VALUES (?, ?)";
 
         $statement = ConnectionHandler::getConnection()->prepare($query);
-        $statement->bind_param('ssi',$username, $password, $isAdmin);
+        $statement->bind_param('idd',$student,strtotime($date_start),strtotime($date_end));
 
         if (!$statement->execute()) {
             throw new Exception($statement->error);
         }
-
         return $statement->insert_id;
     }
+    public function insertLesson($abs_id,$isKont,$isDisp,$disp_id)
+    {
+        $query = "INSERT INTO  lesson (abs_id,isKontingent,isDispensation,disp_id) VALUES (?,?, ?)";
 
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('ibbi',$abs_id,$isKont,$isDisp,$disp_id);
+
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+        return $statement->insert_id;
+    }
     public function readByName($uname)
     {
         // Query erstellen
@@ -73,20 +81,40 @@ class AbsentRepository extends Repository
         // Den gefundenen Datensatz zurückgeben
         return $row;
     }
-
-    public function existingUsername($username){
-        $query = "SELECT uid FROM $this->tableName WHERE uname = ?";
+    public function getHT($day_start,$day_end,$student){
+        $date = $day_start;
+        $anzkont = 0;
+        $query = "SELECT lessons_1ht, lessons_2ht 
+                  FROM day AS d JOIN timetable_day AS td ON d.dayId = td.day_id,
+                  JOIN timetable AS t ON td.timetable_id,
+                  JOIN class AS c ON t.timetableId = c.timetable_id,
+                  JOIN user AS u ON u.class_id = c.classId WHERE d.name = ? AND u.uId = ?";
         $statement = ConnectionHandler::getConnection()->prepare($query);
-
-        $statement->bind_param('s', $username);
-        if (!$statement->execute()) {
-            throw new Exception($statement->error);
+        $workDays = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+        while (strtotime($date) <= strtotime($day_end)) {
+           if(in_array(date('l',$date),$workDays)){
+               $day = "Montag";
+               switch (date('l',$date)){
+                   case 'Monday': $day = "Montag"; break;
+                   case 'Tuesday': $day = "Dienstag"; break;
+                   case 'Wednesday': $day = "Mittwoch"; break;
+                   case 'Thursday': $day = "Donnerstag"; break;
+                   case 'Friday': $day = "Freitag"; break;
+               }
+                $statement->bind_param('si',$day,$student);
+               $statement->execute();
+               $result = $statement->get_result();
+               if (!$result) {
+                   throw new Exception($statement->error);
+               }
+               $row = $result->fetch_object();
+               $result->close();
+               $anzkont += intval($row->lessons_1ht);
+               $anzkont += intval($row->lessons_2ht);
+           }
+           $date = date("M-d-Y",strtotime("+1 day",strtotime($date)));
         }
-        $result = $statement->get_result();
-        if($result->num_rows >= 1){
-            return true;
-        }
-        return false;
-
+        return $anzkont;
     }
+
 }
