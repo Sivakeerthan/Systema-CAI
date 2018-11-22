@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 15. Nov 2018 um 11:32
--- Server-Version: 10.1.36-MariaDB
--- PHP-Version: 7.2.11
+-- Erstellungszeit: 22. Nov 2018 um 10:37
+-- Server-Version: 10.1.34-MariaDB
+-- PHP-Version: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -47,6 +47,13 @@ CREATE TABLE `class` (
   `timetable_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Daten für Tabelle `class`
+--
+
+INSERT INTO `class` (`classId`, `name`, `timetable_id`) VALUES
+(1, 'IM16a', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -59,6 +66,17 @@ CREATE TABLE `day` (
   `lessons_1ht` int(11) NOT NULL,
   `lessons_2ht` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `day`
+--
+
+INSERT INTO `day` (`dayId`, `name`, `lessons_1ht`, `lessons_2ht`) VALUES
+(1, 'Montag', 4, 2),
+(2, 'Dienstag', 5, 4),
+(3, 'Mittwoch', 4, 0),
+(4, 'Donnerstag', 0, 0),
+(5, 'Freitag', 5, 5);
 
 -- --------------------------------------------------------
 
@@ -135,6 +153,13 @@ CREATE TABLE `timetable` (
   `year` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Daten für Tabelle `timetable`
+--
+
+INSERT INTO `timetable` (`timetableId`, `year`) VALUES
+(1, '2018/2019');
+
 -- --------------------------------------------------------
 
 --
@@ -145,6 +170,17 @@ CREATE TABLE `timetable_day` (
   `timetable_id` int(11) NOT NULL,
   `day_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `timetable_day`
+--
+
+INSERT INTO `timetable_day` (`timetable_id`, `day_id`) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5);
 
 -- --------------------------------------------------------
 
@@ -261,13 +297,13 @@ ALTER TABLE `absent`
 -- AUTO_INCREMENT für Tabelle `class`
 --
 ALTER TABLE `class`
-  MODIFY `classId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `classId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT für Tabelle `day`
 --
 ALTER TABLE `day`
-  MODIFY `dayId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `dayId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT für Tabelle `dispensation`
@@ -291,7 +327,7 @@ ALTER TABLE `lesson`
 -- AUTO_INCREMENT für Tabelle `timetable`
 --
 ALTER TABLE `timetable`
-  MODIFY `timetableId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `timetableId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT für Tabelle `user`
@@ -313,7 +349,7 @@ ALTER TABLE `absent`
 -- Constraints der Tabelle `class`
 --
 ALTER TABLE `class`
-  ADD CONSTRAINT `fk_class_timetable` FOREIGN KEY (`timetable_id`) REFERENCES `timetable` (`timetableid`);
+  ADD CONSTRAINT `fk_class_timetable` FOREIGN KEY (`timetable_id`) REFERENCES `timetable` (`timetableId`);
 
 --
 -- Constraints der Tabelle `day_teacher`
@@ -335,7 +371,7 @@ ALTER TABLE `lesson`
 --
 ALTER TABLE `timetable_day`
   ADD CONSTRAINT `fk_timetable_day_day` FOREIGN KEY (`day_id`) REFERENCES `day` (`dayId`),
-  ADD CONSTRAINT `fk_timetable_day_timetable` FOREIGN KEY (`timetable_id`) REFERENCES `timetable` (`timetableid`);
+  ADD CONSTRAINT `fk_timetable_day_timetable` FOREIGN KEY (`timetable_id`) REFERENCES `timetable` (`timetableId`);
 
 --
 -- Constraints der Tabelle `user`
