@@ -25,7 +25,8 @@
                     draggable: false,// this allows things to be dropped onto the calendar
                     eventLimit: true, // allow "more" link when too many events
                     events: [
-                        <?php foreach ($events AS $event):?>
+                        <?php if(isset($events)):
+                        foreach ($events AS $event):?>
                         {
 
                             title: "<?=$event->name?>",
@@ -37,16 +38,30 @@
                                 echo "#757575";
                             }?>"
                         },
-                        <?php endforeach;?>
+                        <?php endforeach;
+                                endif;?>
+                        <?php if(isset($absents)):
+                                foreach ($absents AS $absent):?>
+                        {
+
+                            title: "Absenz",
+                            start: "<?=$absent->date_start?>",
+                            end:"<?=$absent->date_end?>"
+                        },
+                        <?php   endforeach;
+                        endif;?>
                     ]
                 });
             });
 
         </script>
-        <?php
-        if(isset($_SESSION['user'])):?>
 
-        <?php endif;?>
+        <?php
+        if(!isset($_SESSION)){
+            session_start();
+        }
+        if(isset($_SESSION['user'])) {
+            }?>
     <script src='/js/plugins/fullcalendar/calendar-script.js'></script>
 
     <!--JavaScript at end of body for optimized loading-->

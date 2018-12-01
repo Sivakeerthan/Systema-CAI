@@ -36,30 +36,32 @@ class UserController
                 if ($user->username != null) {
                     if (password_verify($password, $user->password)) {
                         $pos = $userRepository->getPos($username);
-
+                        if(!isset($_SESSION)){
+                            session_start();
+                        }
                         if(isset($pos)) {
                             switch ($pos) {
                                 case "principal":
                                     $_SESSION['user'] = $username;
-                                    $_SESSION['uid'] =$user->uid;
+                                    $_SESSION['uid'] =$user->uId;
                                     $_SESSION['pos'] = "pr";
                                     header('Location: /overview/principal');
                                     break;
                                 case "secretary":
                                     $_SESSION['user'] = $username;
-                                    $_SESSION['uid'] =$user->uid;
+                                    $_SESSION['uid'] =$user->uId;
                                     $_SESSION['pos'] = "se";
                                     header('Location: /overview/secretary');
                                     break;
                                 case "student":
                                     $_SESSION['user'] = $username;
-                                    $_SESSION['uid'] =$user->uid;
+                                    $_SESSION['uid'] =$user->uId;
                                     $_SESSION['pos'] = "st";
                                     header('Location: /overview/student');
                                     break;
                                 case "teacher":
                                     $_SESSION['user'] = $username;
-                                    $_SESSION['uid'] =$user->uid;
+                                    $_SESSION['uid'] =$user->uId;
                                     $_SESSION['pos'] = "te";
                                     header('Location: /overview/teacher');
                                     break;

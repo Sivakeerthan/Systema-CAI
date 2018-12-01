@@ -1,3 +1,4 @@
+<?php if(!isset($_SESSION)){session_start();} if(isset($_SESSION['user']) && $_SESSION['pos'] == 'st'):?>
 </div>
 
 <div class="overview">
@@ -8,7 +9,7 @@
 
 </div>
 <div id="absence-form" class="container card hide">
-    <form class="col s12" method="post" action="overview/addAbsence">
+    <form class="col s12" method="post" enctype="multipart/form-data" action="/overview/addAbsence">
         <div class="row">
             <div class="input-field col s6">
                 <select id="absence-type" name="absence-type">
@@ -33,7 +34,7 @@
         <div class="row">
             <div class="input-field col s6">
                 <input type="number" name="anz-HT">
-                <label>Anzahl Halbtage</label>
+                <label>Anzahl Kontingent</label>
             </div>
         </div>
         <div class="form-group hide" id="disp-Info">
@@ -47,7 +48,7 @@
                 <div class="file-field input-field col s6">
                   <div class="btn">
                       <span>File</span>
-                      <input type="file" name="doc_file">
+                      <input type="file" id="doc_file" name="doc_file">
                   </div>
                     <div class="file-path-wrapper">
                         <input type="text" class="file-path validate" placeholder="Dokument hochladen">
@@ -66,3 +67,4 @@
     </form>
 </div>
 <div class="container">
+ <?php else: header('Location /overview'); endif;?>

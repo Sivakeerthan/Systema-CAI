@@ -39,9 +39,29 @@ class   OverviewController
         // In diesem Fall möchten wir dem Benutzer die View mit dem Namen
         //   "default_index" rendern. Wie das genau funktioniert, ist in der
         //   View Klasse beschrieben.
+
+        if(!isset($_SESSION['pos'])){
         $view = new View('overview_index');
         $view->title = 'Access Denied!';
         $view->heading = 'Access Denied!';
+        }
+        elseif($_SESSION['pos'] == 'pr'){
+            header('Location: /overview/principal');
+        }
+        elseif($_SESSION['pos'] == 'se'){
+            header('Location: /overview/secretary');
+        }
+        elseif($_SESSION['pos'] == 'st'){
+            header('Location: /overview/student');
+        }
+        elseif($_SESSION['pos'] == 'te'){
+            header('Location: /overview/teacher');
+        }
+        else{
+            $view = new View('overview_index');
+            $view->title = 'Access Denied!';
+            $view->heading = 'Access Denied!';
+        }
         $view->display();
     }
     public function principal(){
@@ -58,9 +78,11 @@ class   OverviewController
         $view->today = date("M d, Y");
         $eventrepository = new EventRepository();
         $view->events = $eventrepository->readAll();
+        $absentrepository = new AbsentRepository();
+        $view->absents = $absentrepository->readByUid($_SESSION['uid']);
 
         $view->display();
-        if ($_POST['submit']){
+        if (isset($_POST['submit'])){
             $this->addAbsence();
         }
     }
@@ -77,8 +99,11 @@ class   OverviewController
         $view->display();
     }
     public function addAbsence(){
+        if(!isset($_SESSION)){
+            session_start();
+        }
         $absentrepository = new AbsentRepository();
-        $absencetype = htmlspecialchars($_POST['absencetype']);
+        $absencetype = htmlspecialchars($_POST['absence-type']);
         $date_start = htmlspecialchars($_POST['date_start']);
         $date_end = htmlspecialchars($_POST['date_end']);
         $anzKontInput = intval(htmlspecialchars($_POST['anz-HT']));
@@ -87,13 +112,15 @@ class   OverviewController
         $dispid = null;
         $isKont = true;
         $isDisp = false;
-        if($absencetype = 'disp') {
+        if($absencetype == 'disp') {
+            echo "<script>console.log('is dispensation')</script>";
             $disp_request = htmlspecialchars($_POST['disp_request']);
             $path = $this->uploadRequest();
             $isKont = false;
             $isDisp = true;
             if($path != null) {
                 $dispid = $absentrepository->createDisp($disp_request,$path);
+                $this->doError("Dispensation eingetragen!");
             }
         }
         if($anzKont!=null) {
@@ -106,16 +133,25 @@ class   OverviewController
                     $anzahl = $anzKontInput;
                 }
             }
-            for ($i = 0; $i <= $anzahl; $i++) {
+            for ($i = 1; $i <= $anzahl; $i++) {
                 $absentrepository->insertLesson($absid, $isKont, $isDisp, $dispid);
             }
+            $this->doError("Absenz eingetragen ;)");
+            echo "<br> abstype:".$absencetype;
+            echo "<br> error:".print_r($_SESSION['err']);
+            header('Location: /overview/student');
         }
 
     }
-    private function uploadRequest(){
-        if(isset($_FILES['doc_file']['tmp_name'])) {
-            $extension = strtolower(pathinfo($_FILES['datei']['name'], PATHINFO_EXTENSION));
-            if (!in_array($extension, 'pdf')) {
+    private function uploadRequest()
+    {
+        if(isset($_POST['submit'])){
+        $check = filesize($_FILES['doc_file']['tmp_name']);
+        if ($check !== false) {
+            echo "<script>console.log('file exists')</script>";
+            $extension = pathinfo($_FILES['doc_file']['name'], PATHINFO_EXTENSION);
+            echo "<br>Extension:" . print_r($extension);
+            if ($extension != 'pdf') {
                 $this->doError("Ungültige Dateiendung");
                 return null;
             }
@@ -125,8 +161,8 @@ class   OverviewController
                 return null;
             }
             if ($detected_type == "application/pdf") {
-                $targetfolder = './files/disp/' . $_FILES['doc_file']['name'];
-                if (move_uploaded_file($_FILES['doc_file']['tmp_name'],$targetfolder)) {
+                $targetfolder = './uploads/files/disp/' . $_FILES['doc_file']['name'];
+                if (move_uploaded_file($_FILES['doc_file']['tmp_name'], $targetfolder)) {
                     $this->doError("Ihre Datei wurde erfolgreich hochgeladen");
                     return $targetfolder;
                 } else {
@@ -135,13 +171,15 @@ class   OverviewController
                 }
 
             }
-        }
-        else{
+        } else {
+            $this->doError("Keine Datei hochgeladen!");
             return null;
+        }
         }
     }
     public function doError($error){
         $this->err = array_fill(0,1,$error);
         $_SESSION['err'] = $this->err;
     }
+
 }

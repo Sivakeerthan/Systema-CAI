@@ -13,7 +13,7 @@ class AbsentRepository extends Repository
      * Diese Variable wird von der Klasse Repository verwendet, um generische
      * Funktionen zur Verfügung zu stellen.
      */
-    protected $tableName = 'user';
+    protected $tableName = 'absent';
 
 
     /**
@@ -31,10 +31,24 @@ class AbsentRepository extends Repository
      */
     public function createAbsent($student,$date_start,$date_end)
     {
-        $query = "INSERT INTO  absent (student_id,date_start,date_end) VALUES (?, ?)";
-
+        $query = "INSERT INTO  absent (student_id,date_start,date_end) VALUES (?, ?,?)";
+        $start = date('Y-m-d',strtotime($date_start));
+        $end = date('Y-m-d',strtotime($date_start));
+        echo "Start:".$start;
+        echo "End:".$end;
         $statement = ConnectionHandler::getConnection()->prepare($query);
-        $statement->bind_param('idd',$student,strtotime($date_start),strtotime($date_end));
+        $statement->bind_param('iss',$student,$start,$end);
+
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+        return $statement->insert_id;
+    }
+    public function createDisp($request,$path)
+    {
+        $query = "INSERT INTO  dispensation (request,documenturl) VALUES (?, ?)";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('ss',$request,$path);
 
         if (!$statement->execute()) {
             throw new Exception($statement->error);
@@ -43,68 +57,63 @@ class AbsentRepository extends Repository
     }
     public function insertLesson($abs_id,$isKont,$isDisp,$disp_id)
     {
-        $query = "INSERT INTO  lesson (abs_id,isKontingent,isDispensation,disp_id) VALUES (?,?, ?)";
-
+        $query = "INSERT INTO  lesson (abs_id,isKontingent,isDispensation,disp_id) VALUES (?,?,?,?)";
         $statement = ConnectionHandler::getConnection()->prepare($query);
-        $statement->bind_param('ibbi',$abs_id,$isKont,$isDisp,$disp_id);
+        $statement->bind_param('iiii',$abs_id,intval($isKont),intval($isDisp),$disp_id);
 
         if (!$statement->execute()) {
             throw new Exception($statement->error);
         }
         return $statement->insert_id;
     }
-    public function readByName($uname)
+    public function readByUid($uid)
     {
-        // Query erstellen
-        $query = "SELECT uname, pw FROM {$this->tableName} WHERE uname =?";
+        $query = "SELECT * FROM {$this->tableName}  WHERE student_id = ?";
 
-        // Datenbankverbindung anfordern und, das Query "preparen" (vorbereiten)
-        // und die Parameter "binden"
         $statement = ConnectionHandler::getConnection()->prepare($query);
-        $statement->bind_param('s', $uname);
-
-        // Das Statement absetzen
+        $statement->bind_param('i',$uid);
         $statement->execute();
 
-        // Resultat der Abfrage holen
         $result = $statement->get_result();
         if (!$result) {
             throw new Exception($statement->error);
         }
 
-        // Ersten Datensatz aus dem Reultat holen
-        $row = $result->fetch_object();
+        // Datensätze aus dem Resultat holen und in das Array $rows speichern
+        $rows = array();
+        while ($row = $result->fetch_object()) {
+            $rows[] = $row;
+        }
 
-        // Datenbankressourcen wieder freigeben
-        $result->close();
-
-        // Den gefundenen Datensatz zurückgeben
-        return $row;
+        return $rows;
     }
     public function getHT($day_start,$day_end,$student){
         $date = $day_start;
         $anzkont = 0;
         $query = "SELECT lessons_1ht, lessons_2ht 
-                  FROM day AS d JOIN timetable_day AS td ON d.dayId = td.day_id,
-                  JOIN timetable AS t ON td.timetable_id,
-                  JOIN class AS c ON t.timetableId = c.timetable_id,
-                  JOIN user AS u ON u.class_id = c.classId WHERE d.name = ? AND u.uId = ?";
+                  FROM day AS d JOIN timetable_day AS td ON d.dayId = td.day_id
+                  JOIN timetable AS t ON td.timetable_id
+                  JOIN class AS c ON t.timetableId = c.timetable_id
+                  JOIN user AS u ON u.class_id = c.classId 
+                  WHERE d.name = ? AND u.uId = ?";
         $statement = ConnectionHandler::getConnection()->prepare($query);
         $workDays = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
         while (strtotime($date) <= strtotime($day_end)) {
-           if(in_array(date('l',$date),$workDays)){
+           if(in_array(date('l',strtotime($date)),$workDays)){
                $day = "Montag";
-               switch (date('l',$date)){
-                   case 'Monday': $day = "Montag"; break;
-                   case 'Tuesday': $day = "Dienstag"; break;
-                   case 'Wednesday': $day = "Mittwoch"; break;
-                   case 'Thursday': $day = "Donnerstag"; break;
-                   case 'Friday': $day = "Freitag"; break;
+               switch (date('l',strtotime($date))){
+                   case 'Monday': $day = 'Montag'; break;
+                   case 'Tuesday': $day = 'Dienstag'; break;
+                   case 'Wednesday': $day = 'Mittwoch'; break;
+                   case 'Thursday': $day = 'Donnerstag'; break;
+                   case 'Friday': $day = 'Freitag'; break;
                }
-                $statement->bind_param('si',$day,$student);
+               print_r($day);
+               print_r($student);
+               $statement->bind_param('si',$day,$student);
                $statement->execute();
                $result = $statement->get_result();
-               if (!$result) {
+               if (!$result || $result->num_rows == 0) {
                    throw new Exception($statement->error);
                }
                $row = $result->fetch_object();
@@ -113,6 +122,7 @@ class AbsentRepository extends Repository
                $anzkont += intval($row->lessons_2ht);
            }
            $date = date("M-d-Y",strtotime("+1 day",strtotime($date)));
+           echo "Anzkont:".$anzkont;
         }
         return $anzkont;
     }

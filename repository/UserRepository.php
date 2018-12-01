@@ -48,7 +48,7 @@ class UserRepository extends Repository
     public function readByName($uname)
     {
         // Query erstellen
-        $query = "SELECT username, password FROM {$this->tableName} WHERE username =?";
+        $query = "SELECT uId, username, password FROM {$this->tableName} WHERE username =?";
 
         // Datenbankverbindung anfordern und, das Query "preparen" (vorbereiten)
         // und die Parameter "binden"
