@@ -11,58 +11,16 @@
     <script src='/js/plugins/fullcalendar/lib/jquery.min.js'></script>
     <script src="/js/main.js"></script>
     <script src='/js/plugins/fullcalendar/js/fullcalendar.min.js'></script>
-    <script>
-            $(document).ready(function () {
-                $('#calendar').fullCalendar({
-                    header: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'month,basicWeek,basicDay,'
-                    },
-                    defaultDate: new Date(),
-                    editable: false,
-                    droppable: false,
-                    draggable: false,// this allows things to be dropped onto the calendar
-                    eventLimit: true, // allow "more" link when too many events
-                    events: [
-                        <?php if(isset($events)):
-                        foreach ($events AS $event):?>
-                        {
 
-                            title: "<?=$event->name?>",
-                            start: "<?=$event->date?>",
-                            color:"<?php if($event->isKK){
-                                echo "#D32F2F";
-                            }
-                            else{
-                                echo "#757575";
-                            }?>"
-                        },
-                        <?php endforeach;
-                                endif;?>
-                        <?php if(isset($absents)):
-                                foreach ($absents AS $absent):?>
-                        {
-
-                            title: "Absenz",
-                            start: "<?=$absent->date_start?>",
-                            end:"<?=$absent->date_end?>"
-                        },
-                        <?php   endforeach;
-                        endif;?>
-                    ]
-                });
-            });
-
-        </script>
 
         <?php
         if(!isset($_SESSION)){
             session_start();
         }
-        if(isset($_SESSION['user'])) {
-            }?>
-    <script src='/js/plugins/fullcalendar/calendar-script.js'></script>
+        if(isset($_SESSION['user'])):?>
+                <?php include('../public/js/plugins/fullcalendar/calendar-script.js.php'); new Calendar($events,$absents);?>
+        <?php endif;?>
+
 
     <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
