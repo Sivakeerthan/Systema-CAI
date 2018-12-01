@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.2
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 22. Nov 2018 um 10:37
--- Server-Version: 10.1.34-MariaDB
--- PHP-Version: 7.2.8
+-- Erstellungszeit: 01. Dez 2018 um 14:09
+-- Server-Version: 10.1.36-MariaDB
+-- PHP-Version: 7.2.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -34,6 +34,13 @@ CREATE TABLE `absent` (
   `date_start` date NOT NULL,
   `date_end` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `absent`
+--
+
+INSERT INTO `absent` (`absId`, `student_id`, `date_start`, `date_end`) VALUES
+(1, 1, '2018-12-13', '2018-12-13');
 
 -- --------------------------------------------------------
 
@@ -101,6 +108,13 @@ CREATE TABLE `dispensation` (
   `documenturl` varchar(80) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Daten für Tabelle `dispensation`
+--
+
+INSERT INTO `dispensation` (`dispId`, `request`, `documenturl`) VALUES
+(1, 'Sehr geehrter Herr Nufer, Ich werde an diesem Tag einen Bewerbungsgespräch haben. Deswegen, kann ich nicht am Unterricht teilnehmen.', './uploads/files/disp/lorem-ipsum.pdf');
+
 -- --------------------------------------------------------
 
 --
@@ -133,11 +147,11 @@ INSERT INTO `event` (`evId`, `date`, `isKK`, `name`) VALUES
 CREATE TABLE `lesson` (
   `lesId` int(11) NOT NULL,
   `abs_id` int(11) NOT NULL,
-  `teacher_id` int(11) NOT NULL,
+  `teacher_id` int(11) DEFAULT NULL,
   `isKontingent` tinyint(1) NOT NULL,
   `isDispensation` tinyint(1) NOT NULL,
-  `isExcused` tinyint(1) NOT NULL,
-  `isUnexcused` tinyint(1) NOT NULL,
+  `isExcused` tinyint(1) DEFAULT NULL,
+  `isUnexcused` tinyint(1) DEFAULT NULL,
   `isAccepted` tinyint(1) DEFAULT NULL,
   `disp_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -208,7 +222,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`uId`, `firstname`, `lastname`, `username`, `password`, `isStudent`, `isTeacher`, `isPrincipal`, `isSecretary`, `isAdmin`, `kontingent`, `class_id`) VALUES
-(1, 'Sivakeerthan', 'Vamanarajasekaran', 'SVRNM', '$2y$10$Uc8v.aZ87anXGs37HmQjSuGvJBcMYQ3.5YfQq7mpUggVgBowRhZce', 1, 0, 0, 0, 1, NULL, NULL),
+(1, 'Sivakeerthan', 'Vamanarajasekaran', 'SVRNM', '$2y$10$Uc8v.aZ87anXGs37HmQjSuGvJBcMYQ3.5YfQq7mpUggVgBowRhZce', 1, 0, 0, 0, 1, NULL, 1),
 (2, 'Jerico Luis', 'Lua', 'jericoluislua', '$2y$10$Z0dCCOUu7UWC4g7SR2gHwuZP8u0G3gEwJqeXr6utYV102qPRoG1ju', 1, 0, 0, 0, 1, NULL, NULL);
 
 --
@@ -291,7 +305,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `absent`
 --
 ALTER TABLE `absent`
-  MODIFY `absId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `absId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT für Tabelle `class`
@@ -309,7 +323,7 @@ ALTER TABLE `day`
 -- AUTO_INCREMENT für Tabelle `dispensation`
 --
 ALTER TABLE `dispensation`
-  MODIFY `dispId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `dispId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT für Tabelle `event`
