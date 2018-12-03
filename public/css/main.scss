@@ -78,6 +78,12 @@ html{
         margin-left:10px;
         position: fixed;
         z-index:5;
+        .collapsible-body{
+          overflow: auto;
+          table{
+            display:inline-block;
+          }
+        }
       }
     }
     .insert-form{

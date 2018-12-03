@@ -62,6 +62,10 @@ html {
         margin-left: 10px;
         position: fixed;
         z-index: 5; }
+        html body .overview #control-list .collapsible-body {
+          overflow: auto; }
+          html body .overview #control-list .collapsible-body table {
+            display: inline-block; }
     html body .insert-form {
       float: none;
       z-index: 1 !important;

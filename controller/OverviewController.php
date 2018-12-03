@@ -74,7 +74,7 @@ class   OverviewController
         $eventrepository = new EventRepository();
         $view->events = $eventrepository->readAll();
         $absentrepository = new AbsentRepository();
-        $view->pending_absents = $absentrepository->readForTeacher($_SESSION['uid']);
+        $view->pending_absents = $absentrepository->readAllDisps();
         $view->absents = $absentrepository->readAll();
         $view->students = $this->getStudents();
         $view->display();
@@ -143,7 +143,7 @@ class   OverviewController
         }
         if($anzKont!=null) {
             $anzahl = $anzKont;
-            if($anzKontInput >=4) {
+            if($anzKontInput >=2) {
                 if ($anzKont <= $anzKontInput) {
                     $anzahl =$anzKont;
                 }
@@ -185,6 +185,15 @@ class   OverviewController
             header('Location: /overview/teacher');
         }
     }
+    public function addEvent(){
+        $name = htmlspecialchars($_POST['ev_name']);
+        $date = htmlspecialchars($_POST['date']);
+        $isKK = boolval(htmlspecialchars($_POST['isKK']));
+        $eventrepository = new EventRepository();
+        $eventrepository->create($name,$date,$isKK);
+        $this->doError("Event erstellt ;)");
+        header("Location: /overview/principal");
+    }
     private function uploadRequest()
     {
         if(isset($_POST['submit'])){
@@ -203,10 +212,15 @@ class   OverviewController
                 return null;
             }
             if ($detected_type == "application/pdf") {
-                $targetfolder = './uploads/files/disp/' . $_FILES['doc_file']['name'];
+                if(!is_dir('./uploads/files/disp/'.$_SESSION['uid']."/")) {
+                    mkdir('./uploads/files/disp/'.$_SESSION['uid']."/");
+                }
+                $filename = trim(addslashes($_FILES['doc_file']['name']));
+                $filename = str_replace(' ','_',$filename);
+                $targetfolder = './uploads/files/disp/'.$_SESSION['uid'].'/'.$filename;
                 if (move_uploaded_file($_FILES['doc_file']['tmp_name'], $targetfolder)) {
                     $this->doError("Ihre Datei wurde erfolgreich hochgeladen");
-                    return $targetfolder;
+                    return preg_replace("/^\./","",$targetfolder);
                 } else {
                     $this->doError("Ein Fehler ist aufgetreten :(");
                     return null;
@@ -262,5 +276,13 @@ class   OverviewController
         $this->err = array_fill(0,1,$error);
         $_SESSION['err'] = $this->err;
     }
-
+    public function open(){
+        if ( isset($_SESSION['uid']) && $_SESSION['pos'] == "pr" && isset($_GET['path'])) {
+            header('Content-Type: application/pdf');
+            readfile('./uploads/files/disp/' . $_GET["path"].'.pdf');
+        } else {
+            header("Location: /");
+            exit();
+        }
+    }
 }

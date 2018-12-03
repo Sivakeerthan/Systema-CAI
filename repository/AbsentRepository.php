@@ -116,6 +116,31 @@ class AbsentRepository extends Repository
 
         return $rows;
     }
+    public function readAllDisps()
+    {
+        $query = "SELECT abs.absId AS absId, st.firstname AS fname, st.lastname AS lname, cl.name AS cname, abs.date_start AS sdate,abs.date_end AS edate, les.isUnexcused AS isU, les.isAccepted AS isA, disp.request AS msg, disp.documenturl AS doc FROM {$this->tableName} AS abs 
+                  JOIN user AS st ON abs.student_id = st.uId
+                  JOIN lesson AS les ON abs.absId = les.abs_id
+                  JOIN class AS cl ON st.class_id = cl.classId
+                  JOIN dispensation AS disp ON les.disp_id = disp.dispId  
+                  WHERE les.isDispensation = true GROUP BY abs.absId";
+
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->execute();
+
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        // Datensätze aus dem Resultat holen und in das Array $rows speichern
+        $rows = array();
+        while ($row = $result->fetch_object()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
     public function getHT($day_start,$day_end,$student){
         $date = $day_start;
         $anzkont = 0;

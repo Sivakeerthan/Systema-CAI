@@ -29,14 +29,13 @@ class EventRepository extends Repository
      *
      * @throws Exception falls das Ausführen des Statements fehlschlägt
      */
-    public function create($username, $password, $isAdmin)
+    public function create($name, $datestr, $isKK)
     {
-        $password = password_hash($password, PASSWORD_DEFAULT);
-
-        $query = "INSERT INTO $this->tableName (uname, pw, isAdmin) VALUES (?, ?, ?)";
+        $date = date('Y-m-d',strtotime($datestr));
+        $query = "INSERT INTO $this->tableName (name,date, isKK) VALUES (?, ?, ?)";
 
         $statement = ConnectionHandler::getConnection()->prepare($query);
-        $statement->bind_param('ssi',$username, $password, $isAdmin);
+        $statement->bind_param('ssi',$name, $date, $isKK);
 
         if (!$statement->execute()) {
             throw new Exception($statement->error);
