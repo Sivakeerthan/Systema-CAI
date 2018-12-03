@@ -73,6 +73,58 @@ class UserRepository extends Repository
         // Den gefundenen Datensatz zurückgeben
         return $row;
     }
+    public function readByFullName($fname,$lname)
+    {
+        // Query erstellen
+        $query = "SELECT uId FROM {$this->tableName} WHERE firstname = ? AND lastname = ?";
+
+        // Datenbankverbindung anfordern und, das Query "preparen" (vorbereiten)
+        // und die Parameter "binden"
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('ss', $fname, $lname);
+
+        // Das Statement absetzen
+        $statement->execute();
+
+        // Resultat der Abfrage holen
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        // Ersten Datensatz aus dem Reultat holen
+        $row = $result->fetch_object();
+
+        // Datenbankressourcen wieder freigeben
+        $result->close();
+
+        // Den gefundenen Datensatz zurückgeben
+        return $row->uId;
+    }
+    public function readAllStudents()
+    {
+        // Query erstellen
+        $query = "SELECT uId, firstname, lastname FROM {$this->tableName} WHERE isStudent = true";
+
+        // Datenbankverbindung anfordern und, das Query "preparen" (vorbereiten)
+        // und die Parameter "binden"
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+
+        // Das Statement absetzen
+        $statement->execute();
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        // Datensätze aus dem Resultat holen und in das Array $rows speichern
+        $rows = array();
+        while ($row = $result->fetch_object()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
     public function getPos($uname){
         // Query erstellen
         $query = "SELECT isPrincipal,isSecretary,isStudent,isTeacher FROM {$this->tableName} WHERE username =?";

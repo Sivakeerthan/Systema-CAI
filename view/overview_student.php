@@ -8,7 +8,7 @@
 
 
 </div>
-<div id="absence-form" class="container card hide">
+<div id="absence-form" class="container card hide insert-form">
     <form class="col s12" method="post" enctype="multipart/form-data" action="/overview/addAbsence">
         <div class="row">
             <div class="input-field col s6">

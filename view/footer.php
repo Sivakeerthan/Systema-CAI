@@ -19,6 +19,16 @@
         }
         if(isset($_SESSION['user'])):?>
                 <?php include('../public/js/plugins/fullcalendar/calendar-script.js.php'); new Calendar($events,$absents);?>
+                <?php if(isset($students)):?>
+                <script>
+
+                    $(document).ready(function(){
+                        $('input.autocomplete').autocomplete({
+                            data: <?php echo json_encode($students)?>,
+                        });
+                    });
+                </script>
+                <?php endif; ?>
         <?php endif;?>
 
 

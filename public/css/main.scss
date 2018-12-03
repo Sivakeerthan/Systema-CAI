@@ -69,10 +69,18 @@ html{
         max-width: 900px;
         margin: 0 auto;
         color: $text2;
+        z-index:0;
       }
-
+      #control-list{
+        color: $text2;
+        width: 20%;
+        float:left;
+        margin-left:10px;
+        position: fixed;
+        z-index:5;
+      }
     }
-    #absence-form{
+    .insert-form{
       float: none;
       z-index:1!important;
       margin: 0 auto;

@@ -24,6 +24,7 @@
  */
 require_once '../repository/EventRepository.php';
 require_once '../repository/AbsentRepository.php';
+require_once '../repository/UserRepository.php';
 class   OverviewController
 {
     /**
@@ -68,6 +69,14 @@ class   OverviewController
         $view = new View('overview_principal');
         $view->title = 'Übersicht';
         $view->heading = 'Übersicht';
+        $view->uname = $_SESSION['user'];
+        $view->today = date("M d, Y");
+        $eventrepository = new EventRepository();
+        $view->events = $eventrepository->readAll();
+        $absentrepository = new AbsentRepository();
+        $view->pending_absents = $absentrepository->readForTeacher($_SESSION['uid']);
+        $view->absents = $absentrepository->readAll();
+        $view->students = $this->getStudents();
         $view->display();
     }
     public function student(){
@@ -90,6 +99,15 @@ class   OverviewController
         $view = new View('overview_teacher');
         $view->title = 'Übersicht';
         $view->heading = 'Übersicht';
+        $view->uname = $_SESSION['user'];
+        $view->today = date("M d, Y");
+        $eventrepository = new EventRepository();
+        $view->events = $eventrepository->readAll();
+        $absentrepository = new AbsentRepository();
+        $view->pending_absents = $absentrepository->readForTeacher($_SESSION['uid']);
+        $view->absents = $absentrepository->readAll();
+        $view->students = $this->getStudents();
+
         $view->display();
     }
     public function secretary(){
@@ -143,6 +161,30 @@ class   OverviewController
         }
 
     }
+    public function addUnexcused(){
+        if(!isset($_SESSION)){
+            session_start();
+        }
+        $absentrepository = new AbsentRepository();
+        $userrepository = new UserRepository();
+        $date = htmlspecialchars($_POST['date']);
+        $anzLessons = intval(htmlspecialchars($_POST['anz_lessons']));
+        $studentinput = htmlspecialchars($_POST['abs_student']);
+        $studentarr = explode(" ",$studentinput);
+        $student = $userrepository->readByFullName($studentarr[0],$studentarr[1]);
+        if($anzLessons!=null) {
+            $absid = $absentrepository->createAbsent($student,$date,$date);
+            for ($i = 1; $i <= $anzLessons; $i++) {
+                $absentrepository->insertUnexcusedLesson($absid);
+            }
+            $this->doError("Absenz eingetragen ;)");
+            header('Location: /overview/teacher');
+        }
+        else{
+            $this->doError("Geben Sie bitte die gefehlten Lektionen an!");
+            header('Location: /overview/teacher');
+        }
+    }
     private function uploadRequest()
     {
         if(isset($_POST['submit'])){
@@ -175,6 +217,45 @@ class   OverviewController
             $this->doError("Keine Datei hochgeladen!");
             return null;
         }
+        }
+    }
+    private function getStudents(){
+        $userrepository = new UserRepository();
+        $temp = $userrepository->readAllStudents();
+        $students = array();
+        foreach ($temp AS $s){
+           $students[$s->firstname." ".$s->lastname] = null;
+
+        }
+        if(count($students) > 0){
+            return $students;
+        }
+        return null;
+    }
+    public function doAccept(){
+        $absentrepository = new AbsentRepository();
+        $absid = intval(htmlspecialchars($_GET['id']));
+        try {
+            $absentrepository->acceptLessons($absid);
+            $this->doError("Absenz wurde Akzeptiert");
+            header("Location: /overview/teacher");
+        }catch(Exception $e){
+            $this->doError("Ein Fehler ist aufgetreten, Details finden Sie im Console-Log");
+            header("Location: /overview/teacher");
+            echo"<script>console.log('doAccept-Error: ".$e->getMessage()."')</script>";
+        }
+    }
+    public function doDecline(){
+        $absentrepository = new AbsentRepository();
+        $absid = intval(htmlspecialchars($_GET['id']));
+        try {
+            $absentrepository->declineLessons($absid);
+            $this->doError("Absenz wurde Abgelehnt");
+            header("Location: /overview/teacher");
+        }catch(Exception $e){
+            $this->doError("Ein Fehler ist aufgetreten, Details finden Sie im Console-Log");
+            header("Location: /overview/teacher");
+            echo"<script>console.log('doAccept-Error: ".$e->getMessage()."')</script>";
         }
     }
     public function doError($error){

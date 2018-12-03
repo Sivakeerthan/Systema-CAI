@@ -53,8 +53,16 @@ html {
       html body .overview #calendar {
         max-width: 900px;
         margin: 0 auto;
-        color: #000000; }
-    html body #absence-form {
+        color: #000000;
+        z-index: 0; }
+      html body .overview #control-list {
+        color: #000000;
+        width: 20%;
+        float: left;
+        margin-left: 10px;
+        position: fixed;
+        z-index: 5; }
+    html body .insert-form {
       float: none;
       z-index: 1 !important;
       margin: 0 auto;

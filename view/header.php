@@ -28,7 +28,13 @@
 
         <?php if(isset($_SESSION['user'])):?>
         <h3><?=$_SESSION['user']?></h3>
+        <?php if($_SESSION['pos'] == 'st'):?>
             <button class="form-btn">Absenz Melden</button>
+        <?php elseif($_SESSION['pos'] == 'te'):?>
+                <button class="form-btn">Unentschuldigte Absenz Melden</button>
+        <?php elseif($_SESSION['pos'] == 'pr'):?>
+                <button class="form-btn">Event erstellen</button>
+        <?php else: endif;?>
         <?php else: ?>
         <h3>Systema-CAI</h3>
         <?php endif;?>

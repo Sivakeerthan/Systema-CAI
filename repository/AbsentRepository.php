@@ -87,6 +87,35 @@ class AbsentRepository extends Repository
 
         return $rows;
     }
+    public function readForTeacher($uid)
+    {
+        $query = "SELECT abs.absId AS absId, st.firstname AS fname, st.lastname AS lname, cl.name AS cname, abs.date_start AS date, les.isUnexcused AS isU, les.isAccepted AS isA FROM {$this->tableName} AS abs 
+                  JOIN user AS st ON abs.student_id = st.uId
+                  JOIN lesson AS les ON abs.absId = les.abs_id
+                  JOIN class AS cl ON st.class_id = cl.classId 
+                  JOIN timetable AS ti ON cl.timetable_id = ti.timetableId
+                  JOIN timetable_day AS td ON ti.timetableId = td.timetable_id
+                  JOIN `day` AS d ON td.day_id = d.dayId
+                  JOIN day_teacher AS dt ON d.dayId = dt.day_id 
+                  WHERE dt.teacher_id = ? GROUP BY abs.absId";
+
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('i',$uid);
+        $statement->execute();
+
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        // Datensätze aus dem Resultat holen und in das Array $rows speichern
+        $rows = array();
+        while ($row = $result->fetch_object()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
     public function getHT($day_start,$day_end,$student){
         $date = $day_start;
         $anzkont = 0;
@@ -125,6 +154,36 @@ class AbsentRepository extends Repository
            echo "Anzkont:".$anzkont;
         }
         return $anzkont;
+    }
+    public function insertUnexcusedLesson($abs_id){
+        $query = "INSERT INTO  lesson (abs_id,isExcused,isUnexcused) VALUES (?,false,true)";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('i',$abs_id);
+
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+        return $statement->insert_id;
+    }
+    public function acceptLessons($abs_id){
+        $query="UPDATE lesson SET isAccepted = true, isExcused = true WHERE abs_id = ?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('i',$abs_id);
+        $statement->execute();
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+        return $statement;
+    }
+    public function declineLessons($abs_id){
+        $query="UPDATE lesson SET isUnexcused = true WHERE abs_id = ?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('i',$abs_id);
+        $statement->execute();
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+        return $statement;
     }
 
 }

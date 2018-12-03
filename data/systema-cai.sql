@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 01. Dez 2018 um 14:09
--- Server-Version: 10.1.36-MariaDB
--- PHP-Version: 7.2.11
+-- Erstellungszeit: 03. Dez 2018 um 19:17
+-- Server-Version: 10.1.34-MariaDB
+-- PHP-Version: 5.6.37
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -40,7 +40,9 @@ CREATE TABLE `absent` (
 --
 
 INSERT INTO `absent` (`absId`, `student_id`, `date_start`, `date_end`) VALUES
-(1, 1, '2018-12-13', '2018-12-13');
+(1, 1, '2018-12-13', '2018-12-13'),
+(2, 1, '2018-12-11', '2018-12-11'),
+(7, 1, '2018-12-04', '2018-12-04');
 
 -- --------------------------------------------------------
 
@@ -96,6 +98,27 @@ CREATE TABLE `day_teacher` (
   `teacher_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Daten für Tabelle `day_teacher`
+--
+
+INSERT INTO `day_teacher` (`day_id`, `teacher_id`) VALUES
+(1, 7),
+(1, 9),
+(1, 10),
+(2, 4),
+(2, 5),
+(2, 6),
+(2, 7),
+(2, 9),
+(2, 11),
+(3, 4),
+(3, 5),
+(5, 4),
+(5, 5),
+(5, 6),
+(5, 11);
+
 -- --------------------------------------------------------
 
 --
@@ -148,13 +171,31 @@ CREATE TABLE `lesson` (
   `lesId` int(11) NOT NULL,
   `abs_id` int(11) NOT NULL,
   `teacher_id` int(11) DEFAULT NULL,
-  `isKontingent` tinyint(1) NOT NULL,
-  `isDispensation` tinyint(1) NOT NULL,
-  `isExcused` tinyint(1) DEFAULT NULL,
-  `isUnexcused` tinyint(1) DEFAULT NULL,
-  `isAccepted` tinyint(1) DEFAULT NULL,
+  `isKontingent` tinyint(1) NOT NULL DEFAULT '0',
+  `isDispensation` tinyint(1) NOT NULL DEFAULT '0',
+  `isExcused` tinyint(1) DEFAULT '0',
+  `isUnexcused` tinyint(1) DEFAULT '0',
+  `isAccepted` tinyint(1) DEFAULT '0',
   `disp_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Daten für Tabelle `lesson`
+--
+
+INSERT INTO `lesson` (`lesId`, `abs_id`, `teacher_id`, `isKontingent`, `isDispensation`, `isExcused`, `isUnexcused`, `isAccepted`, `disp_id`) VALUES
+(1, 2, NULL, 1, 0, 1, 0, 1, NULL),
+(2, 2, NULL, 1, 0, 1, 0, 1, NULL),
+(3, 2, NULL, 1, 0, 1, 0, 1, NULL),
+(4, 2, NULL, 1, 0, 1, 0, 1, NULL),
+(5, 2, NULL, 1, 0, 1, 0, 1, NULL),
+(6, 2, NULL, 1, 0, 1, 0, 1, NULL),
+(7, 2, NULL, 1, 0, 1, 0, 1, NULL),
+(8, 2, NULL, 1, 0, 1, 0, 1, NULL),
+(9, 2, NULL, 1, 0, 1, 0, 1, NULL),
+(10, 2, NULL, 1, 0, 1, 0, 1, NULL),
+(11, 7, NULL, 0, 0, 0, 1, 0, NULL),
+(12, 7, NULL, 0, 0, 0, 1, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -223,7 +264,18 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`uId`, `firstname`, `lastname`, `username`, `password`, `isStudent`, `isTeacher`, `isPrincipal`, `isSecretary`, `isAdmin`, `kontingent`, `class_id`) VALUES
 (1, 'Sivakeerthan', 'Vamanarajasekaran', 'SVRNM', '$2y$10$Uc8v.aZ87anXGs37HmQjSuGvJBcMYQ3.5YfQq7mpUggVgBowRhZce', 1, 0, 0, 0, 1, NULL, 1),
-(2, 'Jerico Luis', 'Lua', 'jericoluislua', '$2y$10$Z0dCCOUu7UWC4g7SR2gHwuZP8u0G3gEwJqeXr6utYV102qPRoG1ju', 1, 0, 0, 0, 1, NULL, NULL);
+(2, 'Jerico Luis', 'Lua', 'jericoluislua', '$2y$10$Z0dCCOUu7UWC4g7SR2gHwuZP8u0G3gEwJqeXr6utYV102qPRoG1ju', 1, 0, 0, 0, 1, NULL, NULL),
+(3, 'Teacher', 'Test', 'teacher1', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
+(4, 'Véronique', 'Fahrni', 'vfahrni', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
+(5, 'Doris', 'Graber', 'dgraber', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
+(6, 'Hermann', 'Michel', 'hmichel', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
+(7, 'Lena', 'Niklaus', 'lniklaus', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
+(8, 'Tim', 'Overmann', 'tovermann', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
+(9, 'Pia', 'Schaffner', 'pschaffner', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
+(10, 'Ingrid', 'Schwab', 'ischwab', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
+(11, 'Irene', 'Staub', 'istaub', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
+(12, 'Raymond', 'Anliker', 'ranliker', '$2y$10$6iwril/Ckl9ovdONU9i4Ve9dot2UvIFSO.ee5YZ6I0xeyQ1vo4U/O', 0, 0, 1, 0, 0, NULL, NULL),
+(13, 'Roland', 'Dardel', 'rdardel', '$2y$10$f2DNJTSHx2XF3lYCtDhF4.NORFM0qm//5Z8ciamIEbaIUOsAy5W2a', 0, 0, 1, 0, 0, NULL, NULL);
 
 --
 -- Indizes der exportierten Tabellen
@@ -305,7 +357,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `absent`
 --
 ALTER TABLE `absent`
-  MODIFY `absId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `absId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT für Tabelle `class`
@@ -335,7 +387,7 @@ ALTER TABLE `event`
 -- AUTO_INCREMENT für Tabelle `lesson`
 --
 ALTER TABLE `lesson`
-  MODIFY `lesId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `lesId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT für Tabelle `timetable`
@@ -347,7 +399,7 @@ ALTER TABLE `timetable`
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `uId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `uId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints der exportierten Tabellen
