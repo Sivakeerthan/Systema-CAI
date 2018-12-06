@@ -170,18 +170,23 @@ class   OverviewController
 
             }
             if ($isKK = true) {
-
-                header('Location: /overview/student');
-                echo "<script> 
-                        var allowed = confirm('Da, ein KK event in dieser Zeit stattfindet, wird diese Absenz als Unentschuldigt markiert.');
-                        if (allowed == true) {
-                            $(location).attr('href','overview/unexcusedAllowed?a1=$anzahl&a2=$absid');
-                        } else {
-                            $(location).attr('href','overview/student');
-                        }
-                        </script>";
-
-
+                $view = new View('overview_student');
+                $view->title = 'Übersicht';
+                $view->heading = 'Übersicht';
+                $view->uname = $_SESSION['user'];
+                $userrepository = new UserRepository();
+                $view->kontingent = $userrepository->readByName($_SESSION['user'])->kontingent;
+                $view->today = date("M d, Y");
+                $eventrepository = new EventRepository();
+                $view->events = $eventrepository->readAll();
+                $absentrepository = new AbsentRepository();
+                $view->absents = $absentrepository->readByUid($_SESSION['uid']);
+                $view->kkanzahl = $anzahl;
+                $view->kkabsid = $absid;
+                $view->display();
+                if (isset($_POST['submit'])) {
+                    $this->addAbsence();
+                }
             }
 
             echo "<br> abstype:" . $absencetype;
