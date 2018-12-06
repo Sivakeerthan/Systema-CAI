@@ -25,6 +25,7 @@
 require_once '../repository/EventRepository.php';
 require_once '../repository/AbsentRepository.php';
 require_once '../repository/UserRepository.php';
+
 class   OverviewController
 {
     /**
@@ -35,37 +36,35 @@ class   OverviewController
      * beschrieben.
      */
     public $err = array();
+
     public function index()
     {
         // In diesem Fall möchten wir dem Benutzer die View mit dem Namen
         //   "default_index" rendern. Wie das genau funktioniert, ist in der
         //   View Klasse beschrieben.
 
-        if(!isset($_SESSION['pos'])){
-        $view = new View('overview_index');
-        $view->title = 'Access Denied!';
-        $view->heading = 'Access Denied!';
-        }
-        elseif($_SESSION['pos'] == 'pr'){
+        if (!isset($_SESSION['pos'])) {
+            $view = new View('overview_index');
+            $view->title = 'Access Denied!';
+            $view->heading = 'Access Denied!';
+        } elseif ($_SESSION['pos'] == 'pr') {
             header('Location: /overview/principal');
-        }
-        elseif($_SESSION['pos'] == 'se'){
+        } elseif ($_SESSION['pos'] == 'se') {
             header('Location: /overview/secretary');
-        }
-        elseif($_SESSION['pos'] == 'st'){
+        } elseif ($_SESSION['pos'] == 'st') {
             header('Location: /overview/student');
-        }
-        elseif($_SESSION['pos'] == 'te'){
+        } elseif ($_SESSION['pos'] == 'te') {
             header('Location: /overview/teacher');
-        }
-        else{
+        } else {
             $view = new View('overview_index');
             $view->title = 'Access Denied!';
             $view->heading = 'Access Denied!';
         }
         $view->display();
     }
-    public function principal(){
+
+    public function principal()
+    {
         $view = new View('overview_principal');
         $view->title = 'Übersicht';
         $view->heading = 'Übersicht';
@@ -79,7 +78,9 @@ class   OverviewController
         $view->students = $this->getStudents();
         $view->display();
     }
-    public function student(){
+
+    public function student()
+    {
         $view = new View('overview_student');
         $view->title = 'Übersicht';
         $view->heading = 'Übersicht';
@@ -93,11 +94,13 @@ class   OverviewController
         $view->absents = $absentrepository->readByUid($_SESSION['uid']);
 
         $view->display();
-        if (isset($_POST['submit'])){
+        if (isset($_POST['submit'])) {
             $this->addAbsence();
         }
     }
-    public function teacher(){
+
+    public function teacher()
+    {
         $view = new View('overview_teacher');
         $view->title = 'Übersicht';
         $view->heading = 'Übersicht';
@@ -112,59 +115,87 @@ class   OverviewController
 
         $view->display();
     }
-    public function secretary(){
+
+    public function secretary()
+    {
         $view = new View('overview_secretary');
         $view->title = 'Übersicht';
         $view->heading = 'Übersicht';
         $view->display();
     }
-    public function addAbsence(){
-        if(!isset($_SESSION)){
+
+    public function addAbsence()
+    {
+        if (!isset($_SESSION)) {
             session_start();
         }
+
         $absentrepository = new AbsentRepository();
         $absencetype = htmlspecialchars($_POST['absence-type']);
         $date_start = htmlspecialchars($_POST['date_start']);
         $date_end = htmlspecialchars($_POST['date_end']);
         $anzKontInput = intval(htmlspecialchars($_POST['anz-HT']));
-        $anzKont = intval($absentrepository->getHT($date_start,$date_end,$_SESSION['uid']));
-        $absid = $absentrepository->createAbsent($_SESSION['uid'],$date_start,$date_end);
+        $anzKont = intval($absentrepository->getHT($date_start, $date_end, $_SESSION['uid']));
+        $absid = $absentrepository->createAbsent($_SESSION['uid'], $date_start, $date_end);
+        $isKK = boolval($absentrepository->isKKEvent($date_start, $date_end));
         $dispid = null;
-        $isKont = true;
-        $isDisp = false;
-        if($absencetype == 'disp') {
+
+        if ($absencetype == 'disp') {
             echo "<script>console.log('is dispensation')</script>";
             $disp_request = htmlspecialchars($_POST['disp_request']);
             $path = $this->uploadRequest();
             $isKont = false;
             $isDisp = true;
-            if($path != null) {
-                $dispid = $absentrepository->createDisp($disp_request,$path);
+            $dispid = $absentrepository->createDisp($disp_request, $path);
+            if ($dispid != null) {
                 $this->doError("Dispensation eingetragen!");
             }
+
         }
-        if($anzKont!=null) {
+        if ($anzKont != null) {
             $anzahl = $anzKont;
-            if($anzKontInput >=2) {
+            if ($anzKontInput >= 2) {
                 if ($anzKont <= $anzKontInput) {
-                    $anzahl =$anzKont;
+                    $anzahl = $anzKont;
                 }
                 if ($anzKont > $anzKontInput) {
                     $anzahl = $anzKontInput;
                 }
             }
-            for ($i = 1; $i <= $anzahl; $i++) {
-                $absentrepository->insertLesson($absid, $isKont, $isDisp, $dispid);
+            if ($isKK = false) {
+                for ($i = 1; $i <= $anzahl; $i++) {
+                    $absentrepository->insertLesson($absid, $isKont, $isDisp, $dispid);
+                }
+                $this->doError("Absenz eingetragen ;)");
+
             }
-            $this->doError("Absenz eingetragen ;)");
-            echo "<br> abstype:".$absencetype;
-            echo "<br> error:".print_r($_SESSION['err']);
-            header('Location: /overview/student');
+            if ($isKK = true) {
+
+                header('Location: /overview/student');
+                echo "<script> 
+                        var allowed = confirm('Da, ein KK event in dieser Zeit stattfindet, wird diese Absenz als Unentschuldigt markiert.');
+                        if (allowed == true) {
+                            $(location).attr('href','overview/unexcusedAllowed?a1=$anzahl&a2=$absid');
+                        } else {
+                            $(location).attr('href','overview/student');
+                        }
+                        </script>";
+
+
+            }
+
+            echo "<br> abstype:" . $absencetype;
+            echo "<br> msg:" . print_r($_SESSION['err']);
+            echo "<br> isKK:" . print_r($isKK);
+            //header('Location: /overview/student');
         }
 
+
     }
-    public function addUnexcused(){
-        if(!isset($_SESSION)){
+
+    public function addUnexcused()
+    {
+        if (!isset($_SESSION)) {
             session_start();
         }
         $absentrepository = new AbsentRepository();
@@ -172,109 +203,119 @@ class   OverviewController
         $date = htmlspecialchars($_POST['date']);
         $anzLessons = intval(htmlspecialchars($_POST['anz_lessons']));
         $studentinput = htmlspecialchars($_POST['abs_student']);
-        $studentarr = explode(" ",$studentinput);
-        $student = $userrepository->readByFullName($studentarr[0],$studentarr[1]);
-        if($anzLessons!=null) {
-            $absid = $absentrepository->createAbsent($student,$date,$date);
+        $studentarr = explode(" ", $studentinput);
+        $student = $userrepository->readByFullName($studentarr[0], $studentarr[1]);
+        if ($anzLessons != null) {
+            $absid = $absentrepository->createAbsent($student, $date, $date);
             for ($i = 1; $i <= $anzLessons; $i++) {
                 $absentrepository->insertUnexcusedLesson($absid);
             }
             $this->doError("Absenz eingetragen ;)");
             header('Location: /overview/teacher');
-        }
-        else{
+        } else {
             $this->doError("Geben Sie bitte die gefehlten Lektionen an!");
             header('Location: /overview/teacher');
         }
     }
-    public function addEvent(){
+
+    public function addEvent()
+    {
         $name = htmlspecialchars($_POST['ev_name']);
         $date = htmlspecialchars($_POST['date']);
         $isKK = boolval(htmlspecialchars($_POST['isKK']));
         $eventrepository = new EventRepository();
-        $eventrepository->create($name,$date,$isKK);
+        $eventrepository->create($name, $date, $isKK);
         $this->doError("Event erstellt ;)");
         header("Location: /overview/principal");
     }
+
     private function uploadRequest()
     {
-        if(isset($_POST['submit'])){
-        $check = filesize($_FILES['doc_file']['tmp_name']);
-        if ($check !== false) {
-            echo "<script>console.log('file exists')</script>";
-            $extension = pathinfo($_FILES['doc_file']['name'], PATHINFO_EXTENSION);
-            echo "<br>Extension:" . print_r($extension);
-            if ($extension != 'pdf') {
-                $this->doError("Ungültige Dateiendung");
-                return null;
-            }
-            $detected_type = $_FILES['doc_file']['type'];
-            if ($detected_type != "application/pdf") {
-                $this->doError("Nur der Upload von PDF-Dateien ist gestattet");
-                return null;
-            }
-            if ($detected_type == "application/pdf") {
-                if(!is_dir('./uploads/files/disp/'.$_SESSION['uid']."/")) {
-                    mkdir('./uploads/files/disp/'.$_SESSION['uid']."/");
-                }
-                $filename = trim(addslashes($_FILES['doc_file']['name']));
-                $filename = str_replace(' ','_',$filename);
-                $targetfolder = './uploads/files/disp/'.$_SESSION['uid'].'/'.$filename;
-                if (move_uploaded_file($_FILES['doc_file']['tmp_name'], $targetfolder)) {
-                    $this->doError("Ihre Datei wurde erfolgreich hochgeladen");
-                    return preg_replace("/^\./","",$targetfolder);
-                } else {
-                    $this->doError("Ein Fehler ist aufgetreten :(");
+        if (isset($_POST['submit'])) {
+            $check = filesize($_FILES['doc_file']['tmp_name']);
+            if ($check !== false) {
+                echo "<script>console.log('file exists')</script>";
+                $extension = pathinfo($_FILES['doc_file']['name'], PATHINFO_EXTENSION);
+                echo "<br>Extension:" . print_r($extension);
+                if ($extension != 'pdf') {
+                    $this->doError("Ungültige Dateiendung");
                     return null;
                 }
+                $detected_type = $_FILES['doc_file']['type'];
+                if ($detected_type != "application/pdf") {
+                    $this->doError("Nur der Upload von PDF-Dateien ist gestattet");
+                    return null;
+                }
+                if ($detected_type == "application/pdf") {
+                    if (!is_dir('./uploads/files/disp/' . $_SESSION['uid'] . "/")) {
+                        mkdir('./uploads/files/disp/' . $_SESSION['uid'] . "/");
+                    }
+                    $filename = trim(addslashes($_FILES['doc_file']['name']));
+                    $filename = str_replace(' ', '_', $filename);
+                    $targetfolder = './uploads/files/disp/' . $_SESSION['uid'] . '/' . $filename;
+                    if (move_uploaded_file($_FILES['doc_file']['tmp_name'], $targetfolder)) {
+                        $this->doError("Ihre Datei wurde erfolgreich hochgeladen");
+                        return preg_replace("/^\./", "", $targetfolder);
+                    } else {
+                        $this->doError("Ein Fehler ist aufgetreten :(");
+                        return null;
+                    }
 
+                }
+            } else {
+                $this->doError("Keine Datei hochgeladen!");
+                return null;
             }
-        } else {
-            $this->doError("Keine Datei hochgeladen!");
-            return null;
-        }
         }
     }
-    private function getStudents(){
+
+    private function getStudents()
+    {
         $userrepository = new UserRepository();
         $temp = $userrepository->readAllStudents();
         $students = array();
-        foreach ($temp AS $s){
-           $students[$s->firstname." ".$s->lastname] = null;
+        foreach ($temp AS $s) {
+            $students[$s->firstname . " " . $s->lastname] = null;
 
         }
-        if(count($students) > 0){
+        if (count($students) > 0) {
             return $students;
         }
         return null;
     }
-    public function doAccept(){
+
+    public function doAccept()
+    {
         $absentrepository = new AbsentRepository();
         $absid = intval(htmlspecialchars($_GET['id']));
         try {
             $absentrepository->acceptLessons($absid);
             $this->doError("Absenz wurde Akzeptiert");
             header("Location: /overview/teacher");
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->doError("Ein Fehler ist aufgetreten, Details finden Sie im Console-Log");
             header("Location: /overview/teacher");
-            echo"<script>console.log('doAccept-Error: ".$e->getMessage()."')</script>";
+            echo "<script>console.log('doAccept-Error: " . $e->getMessage() . "')</script>";
         }
     }
-    public function doDecline(){
+
+    public function doDecline()
+    {
         $absentrepository = new AbsentRepository();
         $absid = intval(htmlspecialchars($_GET['id']));
         try {
             $absentrepository->declineLessons($absid);
             $this->doError("Absenz wurde Abgelehnt");
             header("Location: /overview/teacher");
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->doError("Ein Fehler ist aufgetreten, Details finden Sie im Console-Log");
             header("Location: /overview/teacher");
-            echo"<script>console.log('doAccept-Error: ".$e->getMessage()."')</script>";
+            echo "<script>console.log('doAccept-Error: " . $e->getMessage() . "')</script>";
         }
     }
-    public function doAcceptDisp(){
+
+    public function doAcceptDisp()
+    {
         $absentrepository = new AbsentRepository();
         $absid = intval(htmlspecialchars($_GET['id1']));
         $dispid = intval(htmlspecialchars($_GET['id2']));
@@ -282,13 +323,15 @@ class   OverviewController
             $absentrepository->acceptLessons($absid);
             $this->doError("Absenz wurde Akzeptiert");
             header("Location: /overview/teacher");
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->doError("Ein Fehler ist aufgetreten, Details finden Sie im Console-Log");
             header("Location: /overview/teacher");
-            echo"<script>console.log('doAccept-Error: ".$e->getMessage()."')</script>";
+            echo "<script>console.log('doAccept-Error: " . $e->getMessage() . "')</script>";
         }
     }
-    public function doDeclineDisp(){
+
+    public function doDeclineDisp()
+    {
         $absentrepository = new AbsentRepository();
         $absid = intval(htmlspecialchars($_GET['id1']));
         $dispid = intval(htmlspecialchars($_GET['id2']));
@@ -296,23 +339,38 @@ class   OverviewController
             $absentrepository->declineLessons($absid);
             $this->doError("Absenz wurde Abgelehnt");
             header("Location: /overview/teacher");
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->doError("Ein Fehler ist aufgetreten, Details finden Sie im Console-Log");
             header("Location: /overview/teacher");
-            echo"<script>console.log('doAccept-Error: ".$e->getMessage()."')</script>";
+            echo "<script>console.log('doAccept-Error: " . $e->getMessage() . "')</script>";
         }
     }
-    public function doError($error){
-        $this->err = array_fill(0,1,$error);
+
+    public function doError($error)
+    {
+        $this->err = array_fill(0, 1, $error);
         $_SESSION['err'] = $this->err;
     }
-    public function open(){
-        if ( isset($_SESSION['uid']) && $_SESSION['pos'] == "pr" && isset($_GET['path'])) {
+
+    public function open()
+    {
+        if (isset($_SESSION['uid']) && $_SESSION['pos'] == "pr" && isset($_GET['path'])) {
             header('Content-Type: application/pdf');
-            readfile('./uploads/files/disp/' . $_GET["path"].'.pdf');
+            readfile('./uploads/files/disp/' . $_GET["path"] . '.pdf');
         } else {
             header("Location: /");
             exit();
         }
+    }
+
+    public function unexcusedAllowed()
+    {
+        $absentrepository = new AbsentRepository();
+        $anzahl = intval(htmlspecialchars($_GET['a1']));
+        $absid = intval(htmlspecialchars($_GET['a2']));
+        for ($i = 1; $i <= $anzahl; $i++) {
+            $absentrepository->insertUnexcusedLesson($absid);
+        }
+        $this->doError("Unentschuldigte Absenz eingetragen ;)");
     }
 }
