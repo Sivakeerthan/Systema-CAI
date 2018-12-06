@@ -34,7 +34,7 @@
                 <?php if ($_SESSION['pos'] == 'st'): ?>
                 <li> Kontingent:<?= $kontingent ?></li>
                 <?php endif; ?>
-            <li></li>
+            <li><a href="/user/logout/">ausloggen</a> </li>
             </ul>
         </div>
         <?php if ($_SESSION['pos'] == 'st'): ?>
