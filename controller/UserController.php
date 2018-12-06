@@ -152,7 +152,7 @@ class UserController
         $_SESSION = null;
         session_unset();
         session_destroy();
-        header("/");
+        header("Location: /");
 
     }
 }

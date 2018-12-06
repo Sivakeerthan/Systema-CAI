@@ -272,6 +272,34 @@ class   OverviewController
             echo"<script>console.log('doAccept-Error: ".$e->getMessage()."')</script>";
         }
     }
+    public function doAcceptDisp(){
+        $absentrepository = new AbsentRepository();
+        $absid = intval(htmlspecialchars($_GET['id1']));
+        $dispid = intval(htmlspecialchars($_GET['id2']));
+        try {
+            $absentrepository->acceptLessons($absid);
+            $this->doError("Absenz wurde Akzeptiert");
+            header("Location: /overview/teacher");
+        }catch(Exception $e){
+            $this->doError("Ein Fehler ist aufgetreten, Details finden Sie im Console-Log");
+            header("Location: /overview/teacher");
+            echo"<script>console.log('doAccept-Error: ".$e->getMessage()."')</script>";
+        }
+    }
+    public function doDeclineDisp(){
+        $absentrepository = new AbsentRepository();
+        $absid = intval(htmlspecialchars($_GET['id1']));
+        $dispid = intval(htmlspecialchars($_GET['id2']));
+        try {
+            $absentrepository->declineLessons($absid);
+            $this->doError("Absenz wurde Abgelehnt");
+            header("Location: /overview/teacher");
+        }catch(Exception $e){
+            $this->doError("Ein Fehler ist aufgetreten, Details finden Sie im Console-Log");
+            header("Location: /overview/teacher");
+            echo"<script>console.log('doAccept-Error: ".$e->getMessage()."')</script>";
+        }
+    }
     public function doError($error){
         $this->err = array_fill(0,1,$error);
         $_SESSION['err'] = $this->err;

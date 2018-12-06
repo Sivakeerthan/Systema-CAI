@@ -40,15 +40,15 @@ if (isset($_SESSION['user']) && $_SESSION['pos'] == 'pr'): ?>
                                     </tbody>
                                 </table>
                                 <a class="waves-effect waves-light btn"
-                                   href="/overview/doAccept?id=<?= $absent->absId ?>"><i class="material-icons left">check</i>Akzeptieren</a>
+                                   href="/overview/doAcceptDisp?id1=<?= $absent->absId ?>&id2=<?=$absent->disp_id?>"><i class="material-icons left">check</i>Akzeptieren</a>
                                 <a class="waves-effect waves-light btn"
-                                   href="/overview/doDecline?id=<?= $absent->absId ?>"><i class="material-icons left">not_interested</i>Ablehnen</a>
+                                   href="/overview/doDeclineDisp?id1=<?= $absent->absId ?>&id2=<?=$absent->disp_id?>"><i class="material-icons left">not_interested</i>Ablehnen</a>
                             </div>
                         </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
-            <?php echo "Pending Absents:" . print_r($pending_absents); endif; ?>
+            <?php endif; ?>
         <div id="calendar"></div>
         <div id="external-events"></div>
 
@@ -89,5 +89,4 @@ if (isset($_SESSION['user']) && $_SESSION['pos'] == 'pr'): ?>
         </form>
     </div>
     <div class="container">
-        <?php echo "Absenzen:".print_r($pending_absents)?>
 <?php else: header('Location /overview'); endif; ?>

@@ -36,7 +36,7 @@
                 <?php endforeach; ?>
             </ul>
         </div>
-    <?php        echo"Pending Absents:".print_r($pending_absents); endif; ?>
+    <?php endif; ?>
         <div id="calendar"></div>
         <div id="external-events"></div>
 
