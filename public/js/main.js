@@ -23,7 +23,12 @@ $(document).ready(function () {
     //tooltip
 
     $('.tooltip-div').click(function () {
-        $('.tooltiptext').addClass("tooltip-visible");
+        if($('.tooltip-content').hasClass(("tooltip-visible"))){
+            $('.tooltip-content').removeClass("tooltip-visible");
+        }
+        else{
+            $('.tooltip-content').addClass("tooltip-visible");
+        }
     });
 });
 $('#absence-type').on('change',function () {

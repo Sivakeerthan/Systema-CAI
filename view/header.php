@@ -30,8 +30,10 @@
         <div class="tooltip-div">
             <h3 id="huname"><?= $uname ?></h3>
 
-            <ul class="tooltipcontent">
-            <li>Kontingent:<?php $</li>
+            <ul class="tooltip-content">
+                <?php if ($_SESSION['pos'] == 'st'): ?>
+                <li> Kontingent:<?= $kontingent ?></li>
+                <?php endif; ?>
             <li></li>
             </ul>
         </div>

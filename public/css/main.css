@@ -79,28 +79,27 @@ html {
     html body .tooltip-div {
       position: relative;
       display: inline-block;
-      border-bottom: 1px dotted black;
-      /* If you want dots under the hoverable text */
       /* Tooltip text */ }
-      html body .tooltip-div .tooltipcontent {
+      html body .tooltip-div .tooltip-content {
         visibility: hidden;
-        width: 120px;
+        width: 180px;
         background-color: #555;
         color: #fff;
         text-align: center;
         padding: 5px 0;
         border-radius: 6px;
+        margin-top: 0;
         /* Position the tooltip text */
         position: absolute;
         z-index: 1;
         top: 135%;
-        left: 50%;
+        left: 40%;
         margin-left: -60px;
         /* Fade in tooltip */
         opacity: 0;
         transition: opacity 0.3s;
         /* Tooltip arrow */ }
-        html body .tooltip-div .tooltipcontent::after {
+        html body .tooltip-div .tooltip-content::after {
           content: "";
           position: absolute;
           bottom: 100%;
