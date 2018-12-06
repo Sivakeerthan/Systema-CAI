@@ -40,6 +40,7 @@ class Calendar
                 editable: false,
                 droppable: false,
                 draggable: false,// this allows things to be dropped onto the calendar
+                locale: 'de-ch',
                 eventLimit: true, // allow 'more' link when too many events
                 events: [
                 ";
