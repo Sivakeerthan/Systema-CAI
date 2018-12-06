@@ -1,4 +1,7 @@
-<?php if(!isset($_SESSION)){session_start();} if(isset($_SESSION['user']) && $_SESSION['pos'] == 'st'):?>
+<?php if(!isset($_SESSION)){session_start();}if(!isset($_SESSION['user'])):?>
+    <p>Du bist nicht eingeloggt.</p>
+    <a href="/user/login/">einloggen</a>
+<?php endif; if(isset($_SESSION['user']) && $_SESSION['pos'] == 'st'):?>
 </div>
 
 <div class="overview">
