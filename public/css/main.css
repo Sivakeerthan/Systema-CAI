@@ -79,14 +79,25 @@ html {
     html body .tooltip-div {
       position: relative;
       display: inline-block;
+      /*#huname:hover{
+        transition: color 0.25s;
+        color: #bfbfbf;
+      }*/
       /* Tooltip text */ }
+      html body .tooltip-div .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none; }
       html body .tooltip-div .tooltip-content {
         visibility: hidden;
         width: 180px;
         background-color: #555;
         color: #fff;
         text-align: center;
-        padding: 5px 0;
+        padding: 5px 0 10px 0;
         border-radius: 6px;
         margin-top: 0;
         /* Position the tooltip text */
@@ -99,6 +110,8 @@ html {
         opacity: 0;
         transition: opacity 0.3s;
         /* Tooltip arrow */ }
+        html body .tooltip-div .tooltip-content .tooltip-li {
+          margin-top: 5px; }
         html body .tooltip-div .tooltip-content::after {
           content: "";
           position: absolute;

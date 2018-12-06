@@ -10,7 +10,8 @@
     <script src='/js/plugins/fullcalendar/lib/moment.min.js'></script>
     <script src='/js/plugins/fullcalendar/lib/jquery.min.js'></script>
     <script src="/js/main.js"></script>
-    <script src='/js/plugins/fullcalendar/js/fullcalendar.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/locale-all.js'></script>
 
 
         <?php

@@ -28,17 +28,20 @@
 
     <?php if (isset($_SESSION['user'])): ?>
         <div class="tooltip-div">
-            <h3 id="huname"><?= $uname ?></h3>
+            <h3 id="huname" class="unselectable"><?= $uname ?></h3>
 
             <ul class="tooltip-content">
-                <?php if ($_SESSION['pos'] == 'st'): ?>
-                <li> Kontingent:<?= $kontingent ?></li>
-                <?php endif; ?>
-            <li><a href="/user/logout/">ausloggen</a> </li>
+
+                <?php  if($kontingent == null){ $kontingent = 0; } if ($_SESSION['pos'] == 'st'):?>
+                <li class="tooltip-li"> Kontingent: <?= $kontingent ?></li>
+                <?php endif;?>
+            <li class="tooltip-li" id="llogout">
+                <a href="/user/logout/">ausloggen</a>
+            </li>
             </ul>
         </div>
         <?php if ($_SESSION['pos'] == 'st'): ?>
-            <button class="form-btn">Absenz Melden</button>
+            <button class="form-btn" id="habsmelden">Absenz Melden</button>
         <?php elseif ($_SESSION['pos'] == 'te'): ?>
             <button class="form-btn">Unentschuldigte Absenz Melden</button>
         <?php elseif ($_SESSION['pos'] == 'pr'): ?>

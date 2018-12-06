@@ -25,11 +25,14 @@ $(document).ready(function () {
     $('.tooltip-div').click(function () {
         if($('.tooltip-content').hasClass(("tooltip-visible"))){
             $('.tooltip-content').removeClass("tooltip-visible");
+            $('#huname').css("color","#ffffff");
         }
         else{
             $('.tooltip-content').addClass("tooltip-visible");
+            $('#huname').css("color","#bfbfbf");
         }
     });
+
 });
 $('#absence-type').on('change',function () {
    if(this.value === "disp"){
