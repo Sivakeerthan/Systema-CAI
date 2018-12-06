@@ -1,6 +1,7 @@
 <?php
 
 require_once '../lib/Repository.php';
+require_once 'EventRepository.php';
 
 /**
  * Das UserRepository ist zuständig für alle Zugriffe auf die Tabelle "user".
@@ -118,7 +119,7 @@ class AbsentRepository extends Repository
     }
     public function readAllDisps()
     {
-        $query = "SELECT abs.absId AS absId, st.firstname AS fname, st.lastname AS lname, cl.name AS cname, abs.date_start AS sdate,abs.date_end AS edate, les.isUnexcused AS isU, les.isAccepted AS isA, disp.request AS msg, disp.documenturl AS doc FROM {$this->tableName} AS abs 
+        $query = "SELECT abs.absId AS absId,disp.dispId AS disp_id, st.firstname AS fname, st.lastname AS lname, cl.name AS cname, abs.date_start AS sdate,abs.date_end AS edate, les.isUnexcused AS isU, les.isAccepted AS isA, disp.request AS msg, disp.documenturl AS doc FROM {$this->tableName} AS abs 
                   JOIN user AS st ON abs.student_id = st.uId
                   JOIN lesson AS les ON abs.absId = les.abs_id
                   JOIN class AS cl ON st.class_id = cl.classId
@@ -210,5 +211,39 @@ class AbsentRepository extends Repository
         }
         return $statement;
     }
-
+    public function acceptDisp($abs_id,$disp_id){
+        $query="UPDATE lesson SET isAccepted = true, isExcused = true WHERE abs_id = ? AND isDispensation = true AND disp_id = ?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('ii',$abs_id,$disp_id);
+        $statement->execute();
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+        return $statement;
+    }
+    public function declineDisp($abs_id,$disp_id){
+        $query="UPDATE lesson SET isUnexcused = true WHERE abs_id = ? AND isDispensation = true AND disp_id = ?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('ii',$abs_id,$disp_id);
+        $statement->execute();
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+        return $statement;
+    }
+    public function isKKEvent($date_start,$date_end){
+        $date = $date_start;
+        $eventrepository = new EventRepository();
+        $events = $eventrepository->readAll();
+        $workDays = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+        while (strtotime($date) <= strtotime($date_end)) {
+            foreach ($events AS $event){
+                if(date($date) == $event->date){
+                    return true;
+                }
+            }
+            $date = date("M-d-Y",strtotime("+1 day",strtotime($date)));
+        }
+        return false;
+    }
 }
