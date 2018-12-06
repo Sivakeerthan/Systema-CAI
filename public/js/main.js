@@ -19,6 +19,12 @@ $(document).ready(function () {
     var elems = document.querySelectorAll('select');
     var instances = M.FormSelect.init(elems);
     $('.collapsible').collapsible();
+
+    //tooltip
+
+    $('.tooltip-div').click(function () {
+        $('.tooltiptext').addClass("tooltip-visible");
+    });
 });
 $('#absence-type').on('change',function () {
    if(this.value === "disp"){

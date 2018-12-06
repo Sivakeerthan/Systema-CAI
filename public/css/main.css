@@ -8,7 +8,8 @@ html {
     display: block;
     margin: 0;
     padding: 0;
-    z-index: 0; }
+    z-index: 0;
+    /* Tooltip container */ }
     html body #header {
       display: inline-block;
       margin: 0;
@@ -75,5 +76,41 @@ html {
       color: #000000; }
     html body .hide {
       display: none; }
+    html body .tooltip-div {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted black;
+      /* If you want dots under the hoverable text */
+      /* Tooltip text */ }
+      html body .tooltip-div .tooltipcontent {
+        visibility: hidden;
+        width: 120px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+        /* Position the tooltip text */
+        position: absolute;
+        z-index: 1;
+        top: 135%;
+        left: 50%;
+        margin-left: -60px;
+        /* Fade in tooltip */
+        opacity: 0;
+        transition: opacity 0.3s;
+        /* Tooltip arrow */ }
+        html body .tooltip-div .tooltipcontent::after {
+          content: "";
+          position: absolute;
+          bottom: 100%;
+          left: 50%;
+          margin-left: -5px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: transparent transparent  #555  transparent; }
+      html body .tooltip-div .tooltip-visible {
+        visibility: visible;
+        opacity: 1; }
 
 /*# sourceMappingURL=main.css.map */
