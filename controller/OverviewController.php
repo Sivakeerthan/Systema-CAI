@@ -151,11 +151,14 @@ class   OverviewController
         $anzKontInput = intval(htmlspecialchars($_POST['anz-HT']));
         $anzKont = intval($absentrepository->getHT($date_start, $date_end, $_SESSION['uid']));
         $userrepository = new UserRepository();
-        $userKont = intval($userrepository->readByName($_SESSION['uname'])->kontingent);
+        $userKont = intval($userrepository->readByName($_SESSION['user'])->kontingent);
         $isKK = boolval($absentrepository->isKKEvent($date_start, $date_end));
         $dispid = null;
-
-
+        if(isset($_COOKIE['kkanz'])&&isset($_COOKIE['kkstart'])&&isset($_COOKIE['kkend'])){
+            setcookie("kkanz",null,time()-360);
+            setcookie("kkstart",null,time()-360);
+            setcookie("kkend",null,time()-360);
+        }
         if ($anzKont != null) {
             $anzahl = $anzKont;
             if ($anzKontInput >= 2) {
@@ -178,26 +181,26 @@ class   OverviewController
                 }
 
             }
-            if ($isKK = false || $absencetype == 'disp') {
+            if ($isKK = false || $userKont >= $anzahl ) {
                 $absid = $absentrepository->createAbsent($_SESSION['uid'], $date_start, $date_end);
                 for ($i = 1; $i <= $anzahl; $i++) {
                     $absentrepository->insertLesson($absid, $isKont, $isDisp, $dispid);
                 }
+                $userrepository->reduceKontingent($_SESSION['uid'],$userKont,$anzahl);
                 $this->doError("Absenz eingetragen ;)");
                 header('Location: /overview/student');
             }
             if ($isKK = true && $absencetype != 'disp' || $userKont < $anzahl) {
-                if(isset($_COOKIE['kkanz'])&&isset($_COOKIE['kkstart'])&&isset($_COOKIE['kkend'])){
-                    setcookie("kkanz",null,time()-360);
-                    setcookie("kkstart",null,time()-360);
-                    setcookie("kkend",null,time()-360);
-                }
+
                 setcookie("kkanz",$anzahl,time()+360);
                 setcookie("kkstart",date('Y-m-d',strtotime($date_start)),time()+360);
                 setcookie("kkend",date('Y-m-d',strtotime($date_end)),time()+360);
 
-                header('Location: /overview/student');
+                //header('Location: /overview/student');
             }
+        }
+        else{
+            header('Location: /overview/student');
         }
 
 

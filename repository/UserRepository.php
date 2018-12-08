@@ -181,4 +181,15 @@ class UserRepository extends Repository
         return false;
 
     }
+    public function reduceKontingent($uid,$kont,$count){
+        $newkont = $kont-$count;
+        $query = "UPDATE user SET kontingent = ? WHERE uId = ?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('ii',$newkont,$uid);
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+
+        return $statement->insert_id;
+    }
 }
