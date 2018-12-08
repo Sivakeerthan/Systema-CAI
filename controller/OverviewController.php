@@ -92,7 +92,21 @@ class   OverviewController
         $view->events = $eventrepository->readAll();
         $absentrepository = new AbsentRepository();
         $view->absents = $absentrepository->readByUid($_SESSION['uid']);
-
+        if(isset($_COOKIE['kkanz'])){
+            $view->kkanzahl = intval(htmlspecialchars($_COOKIE['kkanz']));
+            unset($_COOKIE['kkanz']);
+            setcookie("kkanz",null,time()-360);
+        }
+        if(isset($_COOKIE['kkstart'])){
+            $view->kkstart = htmlspecialchars($_COOKIE['kkstart']);
+            unset($_COOKIE['kkstart']);
+            setcookie("kkstart",null,time()-360);
+        }
+        if(isset($_COOKIE['kkend'])){
+            $view->kkend = htmlspecialchars($_COOKIE['kkend']);
+            unset($_COOKIE['kkend']);
+            setcookie("kkend",null,time()-360);
+        }
         $view->display();
         if (isset($_POST['submit'])) {
             $this->addAbsence();
@@ -136,7 +150,7 @@ class   OverviewController
         $date_end = htmlspecialchars($_POST['date_end']);
         $anzKontInput = intval(htmlspecialchars($_POST['anz-HT']));
         $anzKont = intval($absentrepository->getHT($date_start, $date_end, $_SESSION['uid']));
-        $absid = $absentrepository->createAbsent($_SESSION['uid'], $date_start, $date_end);
+
         $isKK = boolval($absentrepository->isKKEvent($date_start, $date_end));
         $dispid = null;
 
@@ -163,6 +177,7 @@ class   OverviewController
                 }
             }
             if ($isKK = false) {
+                $absid = $absentrepository->createAbsent($_SESSION['uid'], $date_start, $date_end);
                 for ($i = 1; $i <= $anzahl; $i++) {
                     $absentrepository->insertLesson($absid, $isKont, $isDisp, $dispid);
                 }
@@ -170,28 +185,18 @@ class   OverviewController
 
             }
             if ($isKK = true) {
-                $view = new View('overview_student');
-                $view->title = 'Übersicht';
-                $view->heading = 'Übersicht';
-                $view->uname = $_SESSION['user'];
-                $userrepository = new UserRepository();
-                $view->kontingent = $userrepository->readByName($_SESSION['user'])->kontingent;
-                $view->today = date("M d, Y");
-                $eventrepository = new EventRepository();
-                $view->events = $eventrepository->readAll();
-                $absentrepository = new AbsentRepository();
-                $view->absents = $absentrepository->readByUid($_SESSION['uid']);
-                $view->kkanzahl = $anzahl;
-                $view->kkabsid = $absid;
-                $view->display();
-                if (isset($_POST['submit'])) {
-                    $this->addAbsence();
+                if(isset($_COOKIE['kkanz'])&&isset($_COOKIE['kkstart'])&&isset($_COOKIE['kkend'])){
+                    setcookie("kkanz",null,time()-360);
+                    setcookie("kkstart",null,time()-360);
+                    setcookie("kkend",null,time()-360);
                 }
+                setcookie("kkanz",$anzahl,time()+360);
+                setcookie("kkstart",date('Y-m-d',strtotime($date_start)),time()+360);
+                setcookie("kkend",date('Y-m-d',strtotime($date_end)),time()+360);
+
+                header('Location: /overview/student');
             }
 
-            echo "<br> abstype:" . $absencetype;
-            echo "<br> msg:" . print_r($_SESSION['err']);
-            echo "<br> isKK:" . print_r($isKK);
             //header('Location: /overview/student');
         }
 
@@ -372,10 +377,13 @@ class   OverviewController
     {
         $absentrepository = new AbsentRepository();
         $anzahl = intval(htmlspecialchars($_GET['a1']));
-        $absid = intval(htmlspecialchars($_GET['a2']));
+        $start = htmlspecialchars($_GET['a2']);
+        $end = htmlspecialchars($_GET['a3']);
+        $absid = $absentrepository->createAbsent($_SESSION['uid'], $start, $end);
         for ($i = 1; $i <= $anzahl; $i++) {
             $absentrepository->insertUnexcusedLesson($absid);
         }
         $this->doError("Unentschuldigte Absenz eingetragen ;)");
+        header("Location: /overview/student");
     }
 }

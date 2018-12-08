@@ -35,8 +35,6 @@ class AbsentRepository extends Repository
         $query = "INSERT INTO  absent (student_id,date_start,date_end) VALUES (?, ?,?)";
         $start = date('Y-m-d',strtotime($date_start));
         $end = date('Y-m-d',strtotime($date_start));
-        echo "Start:".$start;
-        echo "End:".$end;
         $statement = ConnectionHandler::getConnection()->prepare($query);
         $statement->bind_param('iss',$student,$start,$end);
 

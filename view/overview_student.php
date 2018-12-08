@@ -69,13 +69,14 @@
 
     </form>
 </div>
-<?php if(isset($kkanzahl)&&isset($kkabsid)):?>
+<?php if(isset($kkanzahl)&&isset($kkstart)&&isset($kkend)):?>
     <script>
-        var allowed = confirm('Da, ein KK event in dieser Zeit stattfindet, wird diese Absenz als Unentschuldigt markiert.');
-        if (allowed == true) {
-            $(location).attr('href','/overview/unexcusedAllowed?a1=<?=$kkanzahl?>&a2=<?=$kkabsid?>');
-        } else {
-            $(location).attr('href','/overview/student');
+        var accepted = confirm('Da, ein KK event in dieser Zeit stattfindet, wird diese Absenz als Unentschuldigt markiert.');
+        if (accepted) {
+            window.location.replace("/overview/unexcusedAllowed?a1=<?=$kkanzahl?>&a2=<?=$kkstart?>&a3=<?=$kkend?>");
+        }
+        if(!accepted){
+          window.location.replace("/overview/student");
         }
     </script>
     <?php endif;?>
