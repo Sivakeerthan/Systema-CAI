@@ -150,22 +150,12 @@ class   OverviewController
         $date_end = htmlspecialchars($_POST['date_end']);
         $anzKontInput = intval(htmlspecialchars($_POST['anz-HT']));
         $anzKont = intval($absentrepository->getHT($date_start, $date_end, $_SESSION['uid']));
-
+        $userrepository = new UserRepository();
+        $userKont = intval($userrepository->readByName($_SESSION['uname'])->kontingent);
         $isKK = boolval($absentrepository->isKKEvent($date_start, $date_end));
         $dispid = null;
 
-        if ($absencetype == 'disp') {
-            echo "<script>console.log('is dispensation')</script>";
-            $disp_request = htmlspecialchars($_POST['disp_request']);
-            $path = $this->uploadRequest();
-            $isKont = false;
-            $isDisp = true;
-            $dispid = $absentrepository->createDisp($disp_request, $path);
-            if ($dispid != null) {
-                $this->doError("Dispensation eingetragen!");
-            }
 
-        }
         if ($anzKont != null) {
             $anzahl = $anzKont;
             if ($anzKontInput >= 2) {
@@ -176,15 +166,27 @@ class   OverviewController
                     $anzahl = $anzKontInput;
                 }
             }
-            if ($isKK = false) {
+            if ($absencetype == 'disp') {
+                echo "<script>console.log('is dispensation')</script>";
+                $disp_request = htmlspecialchars($_POST['disp_request']);
+                $path = $this->uploadRequest();
+                $isKont = false;
+                $isDisp = true;
+                $dispid = $absentrepository->createDisp($disp_request, $path);
+                if ($dispid != null) {
+                    $this->doError("Dispensation eingetragen!");
+                }
+
+            }
+            if ($isKK = false || $absencetype == 'disp') {
                 $absid = $absentrepository->createAbsent($_SESSION['uid'], $date_start, $date_end);
                 for ($i = 1; $i <= $anzahl; $i++) {
                     $absentrepository->insertLesson($absid, $isKont, $isDisp, $dispid);
                 }
                 $this->doError("Absenz eingetragen ;)");
-
+                header('Location: /overview/student');
             }
-            if ($isKK = true) {
+            if ($isKK = true && $absencetype != 'disp' || $userKont < $anzahl) {
                 if(isset($_COOKIE['kkanz'])&&isset($_COOKIE['kkstart'])&&isset($_COOKIE['kkend'])){
                     setcookie("kkanz",null,time()-360);
                     setcookie("kkstart",null,time()-360);
@@ -196,8 +198,6 @@ class   OverviewController
 
                 header('Location: /overview/student');
             }
-
-            //header('Location: /overview/student');
         }
 
 

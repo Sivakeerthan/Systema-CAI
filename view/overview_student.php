@@ -71,7 +71,7 @@
 </div>
 <?php if(isset($kkanzahl)&&isset($kkstart)&&isset($kkend)):?>
     <script>
-        var accepted = confirm('Da, ein KK event in dieser Zeit stattfindet, wird diese Absenz als Unentschuldigt markiert.');
+        var accepted = confirm('Entweder findet ein KK-Event zu diesem Zeitpunkt statt oder Sie haben nicht mehr genügend Kontingente. Daher wird diese Absenz als Unentschuldigt markiert.');
         if (accepted) {
             window.location.replace("/overview/unexcusedAllowed?a1=<?=$kkanzahl?>&a2=<?=$kkstart?>&a3=<?=$kkend?>");
         }
