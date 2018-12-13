@@ -31,8 +31,8 @@
             <h3 id="huname" class="unselectable"><?= $uname ?></h3>
 
             <ul class="tooltip-content">
-
-                <?php  if($kontingent == null){ $kontingent = 0; } if ($_SESSION['pos'] == 'st'):?>
+                <?php if ($_SESSION['pos'] == 'st'):
+                if($kontingent == null){ $kontingent = 0; }?>
                 <li class="tooltip-li"> Kontingent: <?= $kontingent ?></li>
                 <?php endif;?>
             <li class="tooltip-li" id="llogout">

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.2
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 03. Dez 2018 um 19:17
--- Server-Version: 10.1.34-MariaDB
--- PHP-Version: 5.6.37
+-- Erstellungszeit: 13. Dez 2018 um 09:31
+-- Server-Version: 10.1.36-MariaDB
+-- PHP-Version: 7.2.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -42,7 +42,17 @@ CREATE TABLE `absent` (
 INSERT INTO `absent` (`absId`, `student_id`, `date_start`, `date_end`) VALUES
 (1, 1, '2018-12-13', '2018-12-13'),
 (2, 1, '2018-12-11', '2018-12-11'),
-(7, 1, '2018-12-04', '2018-12-04');
+(7, 1, '2018-12-04', '2018-12-04'),
+(8, 1, '2018-12-07', '2018-12-07'),
+(9, 1, '2018-12-13', '2018-12-13'),
+(10, 1, '2018-12-14', '2018-12-14'),
+(11, 1, '2018-12-14', '2018-12-14'),
+(12, 1, '2018-12-14', '2018-12-14'),
+(13, 1, '2018-12-14', '2018-12-14'),
+(14, 1, '2018-12-14', '2018-12-14'),
+(15, 1, '2018-12-14', '2018-12-14'),
+(16, 1, '2018-12-14', '2018-12-14'),
+(17, 1, '2018-12-17', '2018-12-17');
 
 -- --------------------------------------------------------
 
@@ -136,7 +146,8 @@ CREATE TABLE `dispensation` (
 --
 
 INSERT INTO `dispensation` (`dispId`, `request`, `documenturl`) VALUES
-(1, 'Sehr geehrter Herr Nufer, Ich werde an diesem Tag einen Bewerbungsgespräch haben. Deswegen, kann ich nicht am Unterricht teilnehmen.', './uploads/files/disp/lorem-ipsum.pdf');
+(1, 'Sehr geehrter Herr Nufer, Ich werde an diesem Tag einen Bewerbungsgespräch haben. Deswegen, kann ich nicht am Unterricht teilnehmen.', './uploads/files/disp/lorem-ipsum.pdf'),
+(2, 'Bewerbungsgespräch', '/uploads/files/disp/1/lorem-ipsum.pdf');
 
 -- --------------------------------------------------------
 
@@ -159,7 +170,8 @@ INSERT INTO `event` (`evId`, `date`, `isKK`, `name`) VALUES
 (1, '2018-10-25 00:00:00', 1, 'TestKK'),
 (2, '2018-10-30 00:00:00', 0, 'Spooky'),
 (3, '2018-11-02 00:00:00', 0, 'Test2'),
-(4, '2018-11-02 00:00:00', 0, 'Test3');
+(4, '2018-11-02 00:00:00', 0, 'Test3'),
+(5, '2018-12-12 00:00:00', 1, 'Test');
 
 -- --------------------------------------------------------
 
@@ -195,7 +207,30 @@ INSERT INTO `lesson` (`lesId`, `abs_id`, `teacher_id`, `isKontingent`, `isDispen
 (9, 2, NULL, 1, 0, 1, 0, 1, NULL),
 (10, 2, NULL, 1, 0, 1, 0, 1, NULL),
 (11, 7, NULL, 0, 0, 0, 1, 0, NULL),
-(12, 7, NULL, 0, 0, 0, 1, 0, NULL);
+(12, 7, NULL, 0, 0, 0, 1, 0, NULL),
+(13, 8, NULL, 0, 1, 1, 0, 1, 2),
+(14, 8, NULL, 0, 1, 1, 0, 1, 2),
+(15, 8, NULL, 0, 1, 1, 0, 1, 2),
+(16, 8, NULL, 0, 1, 1, 0, 1, 2),
+(17, 8, NULL, 0, 1, 1, 0, 1, 2),
+(18, 9, NULL, 0, 0, 0, 1, 0, NULL),
+(19, 9, NULL, 0, 0, 0, 1, 0, NULL),
+(20, 10, NULL, 0, 0, 0, 0, 0, NULL),
+(21, 10, NULL, 0, 0, 0, 0, 0, NULL),
+(22, 11, NULL, 1, 0, 0, 0, 0, NULL),
+(23, 11, NULL, 1, 0, 0, 0, 0, NULL),
+(24, 12, NULL, 1, 0, 0, 0, 0, NULL),
+(25, 12, NULL, 1, 0, 0, 0, 0, NULL),
+(26, 13, NULL, 1, 0, 0, 0, 0, NULL),
+(27, 13, NULL, 1, 0, 0, 0, 0, NULL),
+(28, 14, NULL, 1, 0, 0, 0, 0, NULL),
+(29, 14, NULL, 1, 0, 0, 0, 0, NULL),
+(30, 15, NULL, 0, 0, 0, 0, 0, NULL),
+(31, 15, NULL, 0, 0, 0, 0, 0, NULL),
+(32, 16, NULL, 1, 0, 0, 0, 0, NULL),
+(33, 16, NULL, 1, 0, 0, 0, 0, NULL),
+(34, 17, NULL, 1, 0, 0, 0, 0, NULL),
+(35, 17, NULL, 1, 0, 0, 0, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -263,7 +298,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`uId`, `firstname`, `lastname`, `username`, `password`, `isStudent`, `isTeacher`, `isPrincipal`, `isSecretary`, `isAdmin`, `kontingent`, `class_id`) VALUES
-(1, 'Sivakeerthan', 'Vamanarajasekaran', 'SVRNM', '$2y$10$Uc8v.aZ87anXGs37HmQjSuGvJBcMYQ3.5YfQq7mpUggVgBowRhZce', 1, 0, 0, 0, 1, NULL, 1),
+(1, 'Sivakeerthan', 'Vamanarajasekaran', 'SVRNM', '$2y$10$Uc8v.aZ87anXGs37HmQjSuGvJBcMYQ3.5YfQq7mpUggVgBowRhZce', 1, 0, 0, 0, 1, 14, 1),
 (2, 'Jerico Luis', 'Lua', 'jericoluislua', '$2y$10$Z0dCCOUu7UWC4g7SR2gHwuZP8u0G3gEwJqeXr6utYV102qPRoG1ju', 1, 0, 0, 0, 1, NULL, NULL),
 (3, 'Teacher', 'Test', 'teacher1', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
 (4, 'Véronique', 'Fahrni', 'vfahrni', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
@@ -357,7 +392,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `absent`
 --
 ALTER TABLE `absent`
-  MODIFY `absId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `absId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT für Tabelle `class`
@@ -375,19 +410,19 @@ ALTER TABLE `day`
 -- AUTO_INCREMENT für Tabelle `dispensation`
 --
 ALTER TABLE `dispensation`
-  MODIFY `dispId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `dispId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT für Tabelle `event`
 --
 ALTER TABLE `event`
-  MODIFY `evId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `evId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT für Tabelle `lesson`
 --
 ALTER TABLE `lesson`
-  MODIFY `lesId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `lesId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT für Tabelle `timetable`

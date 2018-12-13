@@ -1,45 +1,55 @@
-<?php if(!isset($_SESSION)){session_start();}if(!isset($_SESSION['user'])):?>
+<?php if (!isset($_SESSION)) {
+    session_start();
+}
+if (!isset($_SESSION['user'])): ?>
     <p>Du bist nicht eingeloggt.</p>
     <a href="/user/login/">einloggen</a>
-<?php endif; if(isset($_SESSION['user']) && $_SESSION['pos'] == 'te'):?>
+<?php endif;
+if (isset($_SESSION['user']) && $_SESSION['pos'] == 'te'): ?>
     </div>
 
     <div class="overview">
-        <?php if(isset($pending_absents) && reset($pending_absents)->isU != 1 && reset($pending_absents)->isA != 1):?>
+        <?php if (isset($pending_absents)): ?>
 
-        <div id="control-list">
-            <ul class="collapsible">
-                <li class="collection-header">Absenzen</li>
-                <?php foreach($pending_absents as $absent):?>
-                <li>
-                    <div class="collapsible-header"><?=$absent->fname?> am <?=date("d-M",strtotime($absent->date))?></div>
-                    <div class="collapsible-body">
-                        <table class="responsive-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Vorname</th>
-                                    <th>Klasse</th>
-                                    <th>Datum</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><?=$absent->lname?></td>
-                                    <td><?=$absent->fname?></td>
-                                    <td><?=$absent->cname?></td>
-                                    <td><?=date("d-M",strtotime($absent->date))?></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <a class="waves-effect waves-light btn" href="/overview/doAccept?id=<?=$absent->absId?>"><i class="material-icons left">check</i>Akzeptieren</a>
-                        <a class="waves-effect waves-light btn" href="/overview/doDecline?id=<?=$absent->absId?>"><i class="material-icons left">not_interested</i>Ablehnen</a>
-                    </div>
-                </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    <?php endif; ?>
+            <div id="control-list">
+                <ul class="collapsible">
+                    <li class="collection-header">Absenzen</li>
+                    <?php foreach ($pending_absents as $absent): ?>
+                        <?php if ($absent->isA != 1 && $absent->isU != 1): ?>
+                            <li>
+                                <div class="collapsible-header"><?= $absent->fname ?>
+                                    am <?= date("d-M", strtotime($absent->date)) ?></div>
+                                <div class="collapsible-body">
+                                    <table class="responsive-table">
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Vorname</th>
+                                            <th>Klasse</th>
+                                            <th>Datum</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td><?= $absent->lname ?></td>
+                                            <td><?= $absent->fname ?></td>
+                                            <td><?= $absent->cname ?></td>
+                                            <td><?= date("d-M", strtotime($absent->date)) ?></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <a class="waves-effect waves-light btn"
+                                       href="/overview/doAccept?id=<?= $absent->absId ?>"><i
+                                                class="material-icons left">check</i>Akzeptieren</a>
+                                    <a class="waves-effect waves-light btn"
+                                       href="/overview/doDecline?id=<?= $absent->absId ?>"><i
+                                                class="material-icons left">not_interested</i>Ablehnen</a>
+                                </div>
+                            </li>
+                        <?php endif; endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
         <div id="calendar"></div>
         <div id="external-events"></div>
 
@@ -77,4 +87,4 @@
         </form>
     </div>
     <div class="container">
-<?php else: header('Location /overview'); endif;?>
+<?php else: header('Location /overview'); endif; ?>
