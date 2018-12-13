@@ -67,7 +67,7 @@ class AbsentRepository extends Repository
     }
     public function readByUid($uid)
     {
-        $query = "SELECT * FROM {$this->tableName}  WHERE student_id = ?";
+        $query = "SELECT date_start,date_end,isExcused,isUnexcused,isDispensation,isKontingent FROM {$this->tableName} AS abs JOIN lesson AS les ON abs.absId = les.abs_id WHERE student_id = ?";
 
         $statement = ConnectionHandler::getConnection()->prepare($query);
         $statement->bind_param('i',$uid);
