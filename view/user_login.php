@@ -19,6 +19,9 @@
                 <div class="col-md-4">
 
                     <input id="send" name="send" type="submit" class="btn btn-primary" value="Log In">
+                    <br>
+                    <br>
+                    <a href="/user/create">Hier registrieren</a>
 
                 </div>
             </div>
