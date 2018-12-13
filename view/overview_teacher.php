@@ -14,8 +14,7 @@ if (isset($_SESSION['user']) && $_SESSION['pos'] == 'te'): ?>
             <div id="control-list">
                 <ul class="collapsible">
                     <li class="collection-header">Absenzen</li>
-                    <?php foreach ($pending_absents as $absent): ?>
-                        <?php if ($absent->isA != 1 && $absent->isU != 1): ?>
+                    <?php  foreach ($pending_absents as $absent): ?>
                             <li>
                                 <div class="collapsible-header"><?= $absent->fname ?>
                                     am <?= date("d-M", strtotime($absent->date)) ?></div>
@@ -46,7 +45,7 @@ if (isset($_SESSION['user']) && $_SESSION['pos'] == 'te'): ?>
                                                 class="material-icons left">not_interested</i>Ablehnen</a>
                                 </div>
                             </li>
-                        <?php endif; endforeach; ?>
+                        <?php endforeach; ?>
                 </ul>
             </div>
         <?php endif; ?>

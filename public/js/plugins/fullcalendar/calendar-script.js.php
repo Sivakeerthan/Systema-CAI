@@ -19,14 +19,15 @@ class Calendar
     {
         $this->absents = $absents;
         $this->events = $events;
-        echo "events-array:".print_r($events);
+        echo "events-array:" . print_r($events);
         $this->build();
     }
 
     /**
      * Builds the Script string for the Calendar.
      */
-    private function build(){
+    private function build()
+    {
         //Start (sets Properties)
         echo " <script>
             $(document).ready(function () {
@@ -46,35 +47,51 @@ class Calendar
                 ";
         // Inserts Events
         if (isset($this->events)) {
-        foreach ($this->events AS $event) {
-        echo "
-                  {
+            echo "{}";
+            foreach ($this->events AS $event) {
+                echo "
+                  ,{
         
-                title: '".$event->name."',
-                    start: '".$event->date."',
+                title: '" . $event->name . "',
+                    start: '" . $event->date . "',
                 color:'";
-        if ($event->isKK){
-            echo "#D32F2F";
-        }else{
-            echo "#757575";
+                if ($event->isKK) {
+                    echo "#D32F2F";
+                } else {
+                    echo "#757575";
+                }
+                echo "'
         }
-        echo "'
-        },
-        ";}
+        ";
+            }
         }
         // Inserts Absents
         if (isset($this->absents)) {
             foreach ($this->absents AS $absent) {
-                echo"
-            {
+                echo "
+            ,{
         
                 title: 'Absenz',
                     start: '" . $absent->date_start . "',
-                end:'" . $absent->date_end . "'
-            },
-          ";}}
+                end:'" . $absent->date_end . "',               
+                color:'";
+                if ($absent->isKontingent && $absent->isExcused) {
+                    echo "#8BC34A";
+                } elseif ($absent->isDispensation && $absent->isExcused) {
+                    echo "#CDDC39";
+                } elseif ($absent->isKontingent && $absent->isUnexcused) {
+                    echo "#b71c1c";
+                } elseif ($absent->isDispensation && $absent->isUnexcused) {
+                    echo "#d32f2f";
+                } else {
+                    echo "#757575";
+                }
+                echo "'
+        }";
+            }
+        }
         // End
-        echo"
+        echo "
         ]
         });
         });
@@ -82,4 +99,5 @@ class Calendar
         </script>";
     }
 }
+
 ?>

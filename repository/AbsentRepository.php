@@ -88,15 +88,15 @@ class AbsentRepository extends Repository
     }
     public function readForTeacher($uid)
     {
-        $query = "SELECT abs.absId AS absId, st.firstname AS fname, st.lastname AS lname, cl.name AS cname, abs.date_start AS date, les.isUnexcused AS isU, les.isAccepted AS isA FROM {$this->tableName} AS abs 
-                  JOIN user AS st ON abs.student_id = st.uId
-                  JOIN lesson AS les ON abs.absId = les.abs_id
+        $query = "SELECT DISTINCT abs.absId AS absId, st.firstname AS fname, st.lastname AS lname, cl.name AS cname, abs.date_start AS date, les.isUnexcused AS isUnexcused, les.isAccepted AS isAccepted, les.isKontingent AS isKontingent, les.isDispensation AS isDispensation FROM lesson AS les 
+                  JOIN absent AS abs ON abs.absId = les.abs_id
+                  JOIN user AS st ON abs.student_id = st.uId                 
                   JOIN class AS cl ON st.class_id = cl.classId 
                   JOIN timetable AS ti ON cl.timetable_id = ti.timetableId
                   JOIN timetable_day AS td ON ti.timetableId = td.timetable_id
                   JOIN `day` AS d ON td.day_id = d.dayId
                   JOIN day_teacher AS dt ON d.dayId = dt.day_id 
-                  WHERE dt.teacher_id = ? GROUP BY abs.absId";
+                  WHERE dt.teacher_id = ?  AND les.isUnexcused = 0 AND les.isAccepted = 0 GROUP BY abs_id";
 
         $statement = ConnectionHandler::getConnection()->prepare($query);
         $statement->bind_param('i',$uid);
@@ -243,5 +243,25 @@ class AbsentRepository extends Repository
             $date = date("M-d-Y",strtotime("+1 day",strtotime($date)));
         }
         return false;
+    }
+    public function readAll($max = 100)
+    {
+        $query = "SELECT date_start,date_end,isExcused,isUnexcused,isDispensation,isKontingent FROM {$this->tableName}  AS abs JOIN lesson AS les ON abs.absId = les.abs_id ";
+
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->execute();
+
+        $result = $statement->get_result();
+        if (!$result) {
+            throw new Exception($statement->error);
+        }
+
+        // Datensätze aus dem Resultat holen und in das Array $rows speichern
+        $rows = array();
+        while ($row = $result->fetch_object()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
     }
 }
