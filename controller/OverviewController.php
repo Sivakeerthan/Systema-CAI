@@ -154,6 +154,8 @@ class   OverviewController
         $userKont = intval($userrepository->readByName($_SESSION['user'])->kontingent);
         $isKK = boolval($absentrepository->isKKEvent($date_start, $date_end));
         $dispid = null;
+        $isKont = true;
+        $isDisp = false;
         if(isset($_COOKIE['kkanz'])&&isset($_COOKIE['kkstart'])&&isset($_COOKIE['kkend'])){
             setcookie("kkanz",null,time()-360);
             setcookie("kkstart",null,time()-360);
@@ -181,25 +183,26 @@ class   OverviewController
                 }
 
             }
-            if ($isKK = false || $userKont >= $anzahl ) {
+            if (!$isKK || $userKont >= $anzahl ) {
                 $absid = $absentrepository->createAbsent($_SESSION['uid'], $date_start, $date_end);
                 for ($i = 1; $i <= $anzahl; $i++) {
                     $absentrepository->insertLesson($absid, $isKont, $isDisp, $dispid);
                 }
-                $userrepository->reduceKontingent($_SESSION['uid'],$userKont,$anzahl);
+                if(!$isDisp) {
+                    $userrepository->reduceKontingent($_SESSION['uid'], $userKont, $anzahl);
+                }
                 $this->doError("Absenz eingetragen ;)");
                 header('Location: /overview/student');
             }
-            if ($isKK = true && $absencetype != 'disp' || $userKont < $anzahl) {
+            if ($isKK && $absencetype != 'disp' || $userKont < $anzahl) {
 
                 setcookie("kkanz",$anzahl,time()+360);
                 setcookie("kkstart",date('Y-m-d',strtotime($date_start)),time()+360);
                 setcookie("kkend",date('Y-m-d',strtotime($date_end)),time()+360);
-
-                //header('Location: /overview/student');
             }
         }
         else{
+            $this->doError("Geben Sie die gefehlten Lektionen ein");
             header('Location: /overview/student');
         }
 
