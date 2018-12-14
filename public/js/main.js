@@ -42,3 +42,20 @@ $('#absence-type').on('change',function () {
        $('#disp-Info').addClass("hide");
    }
 });
+
+//Display available Kontingent for sec
+$('#abs_student_sec').on('change',function(){
+    var fullname = $('#abs_student_sec').val();
+    var temp = fullname.split(" ");
+    var fname = temp[0];
+    var lname = temp[1];
+    $.ajax({
+        type: 'POST',
+        url:'/overview/getKontForSec',
+        data: {'fname_sec':fname,'lname_sec':lname},
+        success: function (output) {
+            $('#avkont-col').removeClass("hide");
+            $('#avkont-span').text("hat noch "+output+" Kontingent");
+        }
+    });
+});

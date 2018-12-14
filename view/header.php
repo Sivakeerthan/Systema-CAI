@@ -40,7 +40,7 @@
             </li>
             </ul>
         </div>
-        <?php if ($_SESSION['pos'] == 'st'): ?>
+        <?php if ($_SESSION['pos'] == 'st' || $_SESSION['pos'] == 'se'): ?>
             <button class="form-btn" id="habsmelden">Absenz Melden</button>
         <?php elseif ($_SESSION['pos'] == 'te'): ?>
             <button class="form-btn">Unentschuldigte Absenz Melden</button>

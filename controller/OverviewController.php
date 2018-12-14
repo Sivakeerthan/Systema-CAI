@@ -135,6 +135,13 @@ class   OverviewController
         $view = new View('overview_secretary');
         $view->title = 'Übersicht';
         $view->heading = 'Übersicht';
+        $view->uname = $_SESSION['user'];
+        $view->today = date("M d, Y");
+        $eventrepository = new EventRepository();
+        $view->events = $eventrepository->readAll();
+        $absentrepository = new AbsentRepository();
+        $view->absents = $absentrepository->readAll();
+        $view->students = $this->getStudents();
         $view->display();
     }
 
@@ -220,7 +227,7 @@ class   OverviewController
         $anzLessons = intval(htmlspecialchars($_POST['anz_lessons']));
         $studentinput = htmlspecialchars($_POST['abs_student']);
         $studentarr = explode(" ", $studentinput);
-        $student = $userrepository->readByFullName($studentarr[0], $studentarr[1]);
+        $student = $userrepository->readByFullName($studentarr[0], $studentarr[1])->uId;
         if ($anzLessons != null) {
             $absid = $absentrepository->createAbsent($student, $date, $date);
             for ($i = 1; $i <= $anzLessons; $i++) {
@@ -231,6 +238,30 @@ class   OverviewController
         } else {
             $this->doError("Geben Sie bitte die gefehlten Lektionen an!");
             header('Location: /overview/teacher');
+        }
+    }
+    public function addAbsenceFromInfoDesk()
+    {
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+        $absentrepository = new AbsentRepository();
+        $userrepository = new UserRepository();
+        $date = htmlspecialchars($_POST['date']);
+        $anzLessons = intval(htmlspecialchars($_POST['anz_lessons']));
+        $studentinput = htmlspecialchars($_POST['abs_student']);
+        $studentarr = explode(" ", $studentinput);
+        $student = $userrepository->readByFullName($studentarr[0], $studentarr[1])->uId;
+        if ($anzLessons != null) {
+            $absid = $absentrepository->createAbsent($student, $date, $date);
+            for ($i = 1; $i <= $anzLessons; $i++) {
+                $absentrepository->insertLesson($absid, true, false, null);
+            }
+            $this->doError("Absenz eingetragen ;)");
+            header('Location: /overview/secretary');
+        } else {
+            $this->doError("Geben Sie bitte die gefehlten Lektionen an!");
+            header('Location: /overview/secretary');
         }
     }
 
@@ -391,5 +422,17 @@ class   OverviewController
         }
         $this->doError("Unentschuldigte Absenz eingetragen ;)");
         header("Location: /overview/student");
+    }
+    public function getKontForSec(){
+        if(isset($_POST['lname_sec'])&&isset($_POST['fname_sec'])){
+            $lname = htmlspecialchars($_POST['lname_sec']);
+            $fname = htmlspecialchars($_POST['fname_sec']);
+            $userrepository = new UserRepository();
+            $student = $userrepository->readByFullName($fname,$lname);
+            echo intval($student->kontingent);
+        }
+        else {
+            echo 0;
+        }
     }
 }

@@ -76,7 +76,7 @@ class UserRepository extends Repository
     public function readByFullName($fname,$lname)
     {
         // Query erstellen
-        $query = "SELECT uId FROM {$this->tableName} WHERE firstname = ? AND lastname = ?";
+        $query = "SELECT uId, kontingent FROM {$this->tableName} WHERE firstname = ? AND lastname = ?";
 
         // Datenbankverbindung anfordern und, das Query "preparen" (vorbereiten)
         // und die Parameter "binden"
@@ -99,7 +99,7 @@ class UserRepository extends Repository
         $result->close();
 
         // Den gefundenen Datensatz zurückgeben
-        return $row->uId;
+        return $row;
     }
     public function readAllStudents()
     {
