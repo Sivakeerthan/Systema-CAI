@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 13. Dez 2018 um 09:31
--- Server-Version: 10.1.36-MariaDB
--- PHP-Version: 7.2.11
+-- Erstellungszeit: 20. Dez 2018 um 00:23
+-- Server-Version: 10.1.34-MariaDB
+-- PHP-Version: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -310,7 +310,8 @@ INSERT INTO `user` (`uId`, `firstname`, `lastname`, `username`, `password`, `isS
 (10, 'Ingrid', 'Schwab', 'ischwab', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
 (11, 'Irene', 'Staub', 'istaub', '$2y$10$EXIzCtoZnNeEY0I.0NedsO0v/uto5xP109LPcJkLW80dxxRXmbbIC', 0, 1, 0, 0, 0, NULL, NULL),
 (12, 'Raymond', 'Anliker', 'ranliker', '$2y$10$6iwril/Ckl9ovdONU9i4Ve9dot2UvIFSO.ee5YZ6I0xeyQ1vo4U/O', 0, 0, 1, 0, 0, NULL, NULL),
-(13, 'Roland', 'Dardel', 'rdardel', '$2y$10$f2DNJTSHx2XF3lYCtDhF4.NORFM0qm//5Z8ciamIEbaIUOsAy5W2a', 0, 0, 1, 0, 0, NULL, NULL);
+(13, 'Roland', 'Dardel', 'rdardel', '$2y$10$f2DNJTSHx2XF3lYCtDhF4.NORFM0qm//5Z8ciamIEbaIUOsAy5W2a', 0, 0, 1, 0, 0, NULL, NULL),
+(14, 'Joel', 'Feller', 'S847', '$2y$10$.QSun0/PogpQwomVtTOOg.E0zxxrUZs9JUKkfQbL9NMchu6elvUtO', 1, 0, 0, 0, 0, NULL, NULL);
 
 --
 -- Indizes der exportierten Tabellen
@@ -434,7 +435,7 @@ ALTER TABLE `timetable`
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `uId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `uId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Constraints der exportierten Tabellen
