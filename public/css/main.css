@@ -39,6 +39,8 @@ html {
         background-color: transparent;
         border: none;
         font-size: large; }
+    html body .pdetails {
+      margin: 0; }
     html body .container {
       color: #000000; }
       html body .container .signbtn {

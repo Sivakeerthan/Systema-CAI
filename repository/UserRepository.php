@@ -48,7 +48,7 @@ class UserRepository extends Repository
     public function readByName($uname)
     {
         // Query erstellen
-        $query = "SELECT uId, username, password,kontingent FROM {$this->tableName} WHERE username =?";
+        $query = "SELECT uId, username, firstname, lastname, password, kontingent FROM {$this->tableName} WHERE username =?";
 
         // Datenbankverbindung anfordern und, das Query "preparen" (vorbereiten)
         // und die Parameter "binden"
@@ -181,6 +181,16 @@ class UserRepository extends Repository
         return false;
 
     }
+    public function changePassword($password, $uid){
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        $query = "UPDATE $this->tableName SET password = ? WHERE id = ?";
+        $statement = ConnectionHandler::getConnection()->prepare($query);
+        $statement->bind_param('si', $password, $uid);
+        if (!$statement->execute()) {
+            throw new Exception($statement->error);
+        }
+    }
+
     public function reduceKontingent($uid,$kont,$count){
         $newkont = $kont-$count;
         $query = "UPDATE user SET kontingent = ? WHERE uId = ?";

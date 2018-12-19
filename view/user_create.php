@@ -2,33 +2,33 @@
 	<div class="component" data-html="true">
 		<div class="form-group">
         <div class="form-group">
-            <label class="col-md-2 control-label" for="fname">First Name</label>
+            <label class="col-md-2 control-label" for="fname">Vorname</label>
             <div class="col-md-4">
-                <input id="fname" name="fname" type="text" placeholder="First Name" class="form-control input-md" required>
+                <input id="fname" name="fname" type="text" placeholder="Vorname" class="form-control input-md" required>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-2 control-label" for="lname">Last Name</label>
+            <label class="col-md-2 control-label" for="lname">Nachname</label>
             <div class="col-md-4">
-                <input id="lname" name="lname" type="text" placeholder="Last Name" class="form-control input-md" required>
+                <input id="lname" name="lname" type="text" placeholder="Nachname" class="form-control input-md" required>
             </div>
         </div>
 		<div class="form-group">
-		  <label class="col-md-2 control-label" for="uname">Username</label>
+		  <label class="col-md-2 control-label" for="uname">Benutzername</label>
 		  <div class="col-md-4">
-		  	<input id="uname" name="uname" type="text" placeholder="Username" class="form-control input-md" required>
+		  	<input id="uname" name="uname" type="text" placeholder="Benutzername" class="form-control input-md" required>
 		  </div>
 		</div>
 		<div class="form-group">
-		  <label class="col-md-2 control-label" for="password">Password</label>
+		  <label class="col-md-2 control-label" for="password">Passwort</label>
 		  <div class="col-md-4">
-		  	<input id="password" name="password" type="password" placeholder="Password" class="form-control input-md" required>
+		  	<input id="password" name="password" type="password" placeholder="Passwort" class="form-control input-md" required>
 		  </div>
 		</div>
 		<div class="form-group">
-		  <label class="col-md-2 control-label" for="password">Password</label>
+		  <label class="col-md-2 control-label" for="password">Passwort wiederholen</label>
 		  <div class="col-md-4">
-		  	<input id="password2" name="password2" type="password" placeholder="Password" class="form-control input-md" required>
+		  	<input id="password2" name="password2" type="password" placeholder="Passwort" class="form-control input-md" required>
 		  </div>
 		</div>
 		<div class="form-group">

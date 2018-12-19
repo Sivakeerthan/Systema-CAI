@@ -10,12 +10,13 @@ class UserController
 {
     public $err = array();
     public $pregex = "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/";
+
     public function index()
     {
+
         $view = new View('overview_student');
         $view->title = 'Login';
         $view->heading = 'Login';
-
         $view->display();
     }
     public function login()
@@ -25,6 +26,17 @@ class UserController
         $view->heading = 'Login';
 
         $view->display();
+    }
+    public function details()
+    {
+        $view = new View('user_details');
+        $view->title = 'Konto';
+        $view->heading = 'Konto';
+        $userRepository = new UserRepository();
+        $view->user = $userRepository->readByName($_SESSION['user']);
+        $view->uname = $_SESSION['user'];
+        $view->display();
+        header('Location: /');
     }
     public function doLogin(){
         $userRepository = new UserRepository();
@@ -43,25 +55,25 @@ class UserController
                             switch ($pos) {
                                 case "principal":
                                     $_SESSION['user'] = $username;
-                                    $_SESSION['uid'] =$user->uId;
+                                    $_SESSION['uid'] = $user->uId;
                                     $_SESSION['pos'] = "pr";
                                     header('Location: /overview/principal');
                                     break;
                                 case "secretary":
                                     $_SESSION['user'] = $username;
-                                    $_SESSION['uid'] =$user->uId;
+                                    $_SESSION['uid'] = $user->uId;
                                     $_SESSION['pos'] = "se";
                                     header('Location: /overview/secretary');
                                     break;
                                 case "student":
                                     $_SESSION['user'] = $username;
-                                    $_SESSION['uid'] =$user->uId;
+                                    $_SESSION['uid'] = $user->uId;
                                     $_SESSION['pos'] = "st";
                                     header('Location: /overview/student');
                                     break;
                                 case "teacher":
                                     $_SESSION['user'] = $username;
-                                    $_SESSION['uid'] =$user->uId;
+                                    $_SESSION['uid'] = $user->uId;
                                     $_SESSION['pos'] = "te";
                                     header('Location: /overview/teacher');
                                     break;
@@ -84,6 +96,27 @@ class UserController
             }
         }
     }
+    public function changeDetails(){
+        $userRepository = new UserRepository();
+        $user = $userRepository->readByName($_SESSION['user']);
+
+        if(isset($_POST['changeinput'])) {
+            $password = $_POST['changepassword'];
+            $user = $_SESSION['uid'];
+
+            if (!empty($_POST['changepassword'])) {
+                if (preg_match($this->pregex, $password)) {
+                    $userRepository->changePassword($password, $user);
+                    echo 'Password changed.';
+                } else {
+                    echo 'Your password needs to have the following: 1 Upper and lowercase, a digit, a special character and consists of 8 characters.';
+                }
+            }
+            if(empty($_POST['changeemail']) && empty($_POST['changepassword'])){
+                echo 'Atleast one field should be filled.';
+            }
+        }
+    }
     public function create()
     {
         $view = new View('user_create');
@@ -97,7 +130,7 @@ class UserController
         if (isset($_POST['signup'])) {
             $firstname = htmlspecialchars($_POST['fname']);
             $lastname = htmlspecialchars($_POST['lname']);
-             $username = htmlspecialchars($_POST['uname']);
+            $username = htmlspecialchars($_POST['uname']);
             $password = htmlspecialchars($_POST['password']);
             $password2 = htmlspecialchars($_POST['password2']);
             if($username == "jericoluislua" || $username == "SVRNM"){

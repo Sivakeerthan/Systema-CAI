@@ -38,6 +38,9 @@
             <li class="tooltip-li" id="llogout">
                 <a href="/user/logout/">ausloggen</a>
             </li>
+            <li class="tooltip-li" id="ldetails">
+                <a href="/user/details/">Konto</a>
+            </li>
             </ul>
         </div>
         <?php if ($_SESSION['pos'] == 'st' || $_SESSION['pos'] == 'se'): ?>
