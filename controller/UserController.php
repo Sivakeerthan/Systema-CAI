@@ -108,6 +108,7 @@ class UserController
                 if (preg_match($this->pregex, $password)) {
                     $userRepository->changePassword($password, $user);
                     echo 'Password changed.';
+                    header('Location: /');
                 } else {
                     echo 'Your password needs to have the following: 1 Upper and lowercase, a digit, a special character and consists of 8 characters.';
                 }

@@ -183,7 +183,7 @@ class UserRepository extends Repository
     }
     public function changePassword($password, $uid){
         $password = password_hash($password, PASSWORD_DEFAULT);
-        $query = "UPDATE $this->tableName SET password = ? WHERE id = ?";
+        $query = "UPDATE $this->tableName SET password = ? WHERE uId = ?";
         $statement = ConnectionHandler::getConnection()->prepare($query);
         $statement->bind_param('si', $password, $uid);
         if (!$statement->execute()) {
